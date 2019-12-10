@@ -12,6 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{129A2C58
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GiasDataLoader", "GiasDataLoader\GiasDataLoader.csproj", "{B579D114-FB41-40BD-BF2C-AD9B75DEF809}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{20AFE215-3D79-4548-ABC4-494650073654}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Spi.Search.Functions.UnitTests", "Dfe.Spi.Search.Functions.UnitTests\Dfe.Spi.Search.Functions.UnitTests.csproj", "{73D97A3B-B952-400B-814E-C49282DF4DA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Spi.Search.Application.UnitTests", "Dfe.Spi.Search.Application.UnitTests\Dfe.Spi.Search.Application.UnitTests.csproj", "{F9DE801E-7F76-42AA-9485-BF521448502C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,8 +44,18 @@ Global
 		{B579D114-FB41-40BD-BF2C-AD9B75DEF809}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B579D114-FB41-40BD-BF2C-AD9B75DEF809}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B579D114-FB41-40BD-BF2C-AD9B75DEF809}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73D97A3B-B952-400B-814E-C49282DF4DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73D97A3B-B952-400B-814E-C49282DF4DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73D97A3B-B952-400B-814E-C49282DF4DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73D97A3B-B952-400B-814E-C49282DF4DA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9DE801E-7F76-42AA-9485-BF521448502C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9DE801E-7F76-42AA-9485-BF521448502C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9DE801E-7F76-42AA-9485-BF521448502C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9DE801E-7F76-42AA-9485-BF521448502C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B579D114-FB41-40BD-BF2C-AD9B75DEF809} = {129A2C58-3E8B-4547-B6B2-F826048F7C03}
+		{73D97A3B-B952-400B-814E-C49282DF4DA8} = {20AFE215-3D79-4548-ABC4-494650073654}
+		{F9DE801E-7F76-42AA-9485-BF521448502C} = {20AFE215-3D79-4548-ABC4-494650073654}
 	EndGlobalSection
 EndGlobal

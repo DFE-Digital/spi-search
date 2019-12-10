@@ -2,13 +2,13 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Dfe.Spi.Common.Logging.Definitions;
+using Dfe.Spi.Search.Application;
 using Dfe.Spi.Search.Application.LearningProviders;
 using Dfe.Spi.Search.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 
 namespace Dfe.Spi.Search.Functions.LearningProviders
@@ -41,12 +41,24 @@ namespace Dfe.Spi.Search.Functions.LearningProviders
                 var json = await reader.ReadToEndAsync();
                 searchRequest = JsonConvert.DeserializeObject<SearchRequest>(json);
             }
+
             _logger.Info($"Received search request {JsonConvert.SerializeObject(searchRequest)}");
 
-            var results = await _searchManager.SearchAsync(searchRequest, cancellationToken);
-            _logger.Info($"Received {results.Documents.Length} documents in resultset");
+            try
+            {
+                var results = await _searchManager.SearchAsync(searchRequest, cancellationToken);
+                _logger.Info($"Received {results.Documents.Length} documents in resultset");
 
-            return new OkObjectResult(results);
+                return new OkObjectResult(results);
+            }
+            catch (InvalidRequestException ex)
+            {
+                _logger.Info($"Request was invalid: {JsonConvert.SerializeObject(ex.Reasons)}");
+                return new BadRequestObjectResult(new
+                {
+                    ex.Reasons,
+                });
+            }
         }
     }
 }
