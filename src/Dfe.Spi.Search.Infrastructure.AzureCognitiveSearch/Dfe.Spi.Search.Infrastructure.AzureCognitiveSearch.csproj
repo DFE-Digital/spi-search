@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Dfe.Spi.Search.Domain\Dfe.Spi.Search.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dfe.Spi.Common.Logging" Version="1.0.5" />
+      <PackageReference Include="Microsoft.Azure.Search" Version="10.1.0" />
+    </ItemGroup>
+
+</Project>

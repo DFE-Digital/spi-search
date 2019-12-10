@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommandLineParser" Version="2.6.0" />
+      <PackageReference Include="CsvHelper" Version="12.2.2" />
+      <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch\Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.csproj" />
+    </ItemGroup>
+
+</Project>

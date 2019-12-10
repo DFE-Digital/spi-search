@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <AzureFunctionsVersion></AzureFunctionsVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Dfe.Spi.Common.Logging" Version="1.0.5" />
+        <PackageReference Include="Dfe.Spi.Models" Version="1.0.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
+        <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.29" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="host.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="local.settings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Dfe.Spi.Search.Application\Dfe.Spi.Search.Application.csproj" />
+      <ProjectReference Include="..\Dfe.Spi.Search.Domain\Dfe.Spi.Search.Domain.csproj" />
+      <ProjectReference Include="..\Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch\Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.csproj" />
+    </ItemGroup>
+</Project>
