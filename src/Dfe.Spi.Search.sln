@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Spi.Search.Functions", "Dfe.Spi.Search.Functions\Dfe.Spi.Search.Functions.csproj", "{A03F5F3F-5B5C-4177-B01E-513655EA8632}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Spi.Search.Domain", "Dfe.Spi.Search.Domain\Dfe.Spi.Search.Domain.csproj", "{5B6DCEDE-7737-4717-9A07-DFC41581147E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Spi.Search.Application", "Dfe.Spi.Search.Application\Dfe.Spi.Search.Application.csproj", "{D82B8640-7A0A-48BF-B795-87AD872D11B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch", "Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch\Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.csproj", "{7DA3AD97-DE7B-4316-A5B0-2134A826B2F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{129A2C58-3E8B-4547-B6B2-F826048F7C03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GiasDataLoader", "GiasDataLoader\GiasDataLoader.csproj", "{B579D114-FB41-40BD-BF2C-AD9B75DEF809}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A03F5F3F-5B5C-4177-B01E-513655EA8632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A03F5F3F-5B5C-4177-B01E-513655EA8632}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A03F5F3F-5B5C-4177-B01E-513655EA8632}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A03F5F3F-5B5C-4177-B01E-513655EA8632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B6DCEDE-7737-4717-9A07-DFC41581147E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B6DCEDE-7737-4717-9A07-DFC41581147E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B6DCEDE-7737-4717-9A07-DFC41581147E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B6DCEDE-7737-4717-9A07-DFC41581147E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D82B8640-7A0A-48BF-B795-87AD872D11B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D82B8640-7A0A-48BF-B795-87AD872D11B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D82B8640-7A0A-48BF-B795-87AD872D11B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D82B8640-7A0A-48BF-B795-87AD872D11B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DA3AD97-DE7B-4316-A5B0-2134A826B2F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DA3AD97-DE7B-4316-A5B0-2134A826B2F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DA3AD97-DE7B-4316-A5B0-2134A826B2F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DA3AD97-DE7B-4316-A5B0-2134A826B2F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B579D114-FB41-40BD-BF2C-AD9B75DEF809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B579D114-FB41-40BD-BF2C-AD9B75DEF809}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B579D114-FB41-40BD-BF2C-AD9B75DEF809}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B579D114-FB41-40BD-BF2C-AD9B75DEF809}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B579D114-FB41-40BD-BF2C-AD9B75DEF809} = {129A2C58-3E8B-4547-B6B2-F826048F7C03}
+	EndGlobalSection
+EndGlobal
