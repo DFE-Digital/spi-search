@@ -25,6 +25,8 @@ ProjectSection(SolutionItems) = preProject
 	..\pipelines\build.yml = ..\pipelines\build.yml
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Spi.Search.IntegrationTests", "Dfe.Spi.Search.IntegrationTests\Dfe.Spi.Search.IntegrationTests.csproj", "{70B71204-A13F-4DA6-A4F5-6CFABE70E01D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,11 +61,16 @@ Global
 		{F9DE801E-7F76-42AA-9485-BF521448502C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9DE801E-7F76-42AA-9485-BF521448502C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9DE801E-7F76-42AA-9485-BF521448502C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70B71204-A13F-4DA6-A4F5-6CFABE70E01D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70B71204-A13F-4DA6-A4F5-6CFABE70E01D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70B71204-A13F-4DA6-A4F5-6CFABE70E01D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70B71204-A13F-4DA6-A4F5-6CFABE70E01D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B579D114-FB41-40BD-BF2C-AD9B75DEF809} = {129A2C58-3E8B-4547-B6B2-F826048F7C03}
 		{73D97A3B-B952-400B-814E-C49282DF4DA8} = {20AFE215-3D79-4548-ABC4-494650073654}
 		{F9DE801E-7F76-42AA-9485-BF521448502C} = {20AFE215-3D79-4548-ABC4-494650073654}
 		{E9CDBECB-37E3-489C-ABE4-6E82CDC6F6E0} = {4470EF8B-EDF3-4137-8425-70DFD2266FA1}
+		{70B71204-A13F-4DA6-A4F5-6CFABE70E01D} = {20AFE215-3D79-4548-ABC4-494650073654}
 	EndGlobalSection
 EndGlobal

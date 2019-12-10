@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+        <PackageReference Include="NUnit" Version="3.11.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+        <PackageReference Include="SpecFlow" Version="3.0.225" />
+        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.225" />
+        <PackageReference Include="SpecFlow.NUnit" Version="3.0.225" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Features\LearningProviders.feature" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Dfe.Spi.Search.Domain\Dfe.Spi.Search.Domain.csproj" />
+      <ProjectReference Include="..\Dfe.Spi.Search.Functions\Dfe.Spi.Search.Functions.csproj" />
+    </ItemGroup>
+
+    <Target Name="AfterUpdateFeatureFilesInProject">
+        <!-- include any generated SpecFlow files in the compilation of the project if not included yet -->
+        <ItemGroup>
+            <Compile Include="**\*.feature.cs" Exclude="@(Compile)" />
+        </ItemGroup>
+    </Target>
+
+</Project>
