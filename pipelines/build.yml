@@ -1,9 +1,10 @@
 trigger:
-  pr: none
   batch: true
   branches:
     include:
       - "*"
+
+pr: none
 
 workspace:
   clean: all
