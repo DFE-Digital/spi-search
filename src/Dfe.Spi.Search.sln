@@ -18,6 +18,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Spi.Search.Functions.Un
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Spi.Search.Application.UnitTests", "Dfe.Spi.Search.Application.UnitTests\Dfe.Spi.Search.Application.UnitTests.csproj", "{F9DE801E-7F76-42AA-9485-BF521448502C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{4470EF8B-EDF3-4137-8425-70DFD2266FA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E9CDBECB-37E3-489C-ABE4-6E82CDC6F6E0}"
+ProjectSection(SolutionItems) = preProject
+	..\pipelines\build.yml = ..\pipelines\build.yml
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,5 +64,6 @@ Global
 		{B579D114-FB41-40BD-BF2C-AD9B75DEF809} = {129A2C58-3E8B-4547-B6B2-F826048F7C03}
 		{73D97A3B-B952-400B-814E-C49282DF4DA8} = {20AFE215-3D79-4548-ABC4-494650073654}
 		{F9DE801E-7F76-42AA-9485-BF521448502C} = {20AFE215-3D79-4548-ABC4-494650073654}
+		{E9CDBECB-37E3-489C-ABE4-6E82CDC6F6E0} = {4470EF8B-EDF3-4137-8425-70DFD2266FA1}
 	EndGlobalSection
 EndGlobal
