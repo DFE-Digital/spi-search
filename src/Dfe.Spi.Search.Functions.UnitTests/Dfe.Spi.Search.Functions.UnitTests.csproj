@@ -22,10 +22,4 @@
       <ProjectReference Include="..\Dfe.Spi.Search.Functions\Dfe.Spi.Search.Functions.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Http.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\..\..\Library\Preferences\Rider2019.2\azure-functions-coretools\2.7.1846\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 </Project>
