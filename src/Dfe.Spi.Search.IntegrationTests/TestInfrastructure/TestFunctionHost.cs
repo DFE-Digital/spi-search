@@ -24,6 +24,16 @@ namespace Dfe.Spi.Search.IntegrationTests.Context
             return _provider.GetService<T>();
         }
 
+        public InMemoryLearningProviderSearchIndex GetInstanceOfLearningProviderSearchIndex()
+        {
+            return (InMemoryLearningProviderSearchIndex) GetInstance<ILearningProviderSearchIndex>();
+        }
+
+        public InProcLoggerWrapper GetInstanceOfLogger()
+        {
+            return (InProcLoggerWrapper) GetInstance<ILoggerWrapper>();
+        }
+
         private IServiceCollection GetDefaultServiceCollection()
         {
             var builder = new HostBuilder();

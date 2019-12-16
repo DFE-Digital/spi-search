@@ -28,7 +28,7 @@ namespace Dfe.Spi.Search.IntegrationTests.Steps
         [Given("the index contains matching documents")]
         public void GivenTheIndexContainsMatchingDocuments()
         {
-            var index = (InMemoryLearningProviderSearchIndex) _host.GetInstance<ILearningProviderSearchIndex>();
+            var index = _host.GetInstanceOfLearningProviderSearchIndex();
             index.SetIndexDataset(new []
             {
                 new LearningProviderSearchDocument
@@ -70,7 +70,7 @@ namespace Dfe.Spi.Search.IntegrationTests.Steps
         [AfterScenario]
         public void AfterScenario()
         {
-            var logger = (InProcLoggerWrapper) _host.GetInstance<ILoggerWrapper>();
+            var logger = _host.GetInstanceOfLogger();
             var logs = logger.GetLogs();
             
             Console.WriteLine();
