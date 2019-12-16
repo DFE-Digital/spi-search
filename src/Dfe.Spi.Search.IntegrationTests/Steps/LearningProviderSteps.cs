@@ -9,6 +9,7 @@ using Dfe.Spi.Search.Domain.Common;
 using Dfe.Spi.Search.Domain.LearningProviders;
 using Dfe.Spi.Search.Functions.LearningProviders;
 using Dfe.Spi.Search.IntegrationTests.Context;
+using Dfe.Spi.Search.IntegrationTests.TestHelpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
@@ -53,8 +54,10 @@ namespace Dfe.Spi.Search.IntegrationTests.Steps
         public async Task ThenIShouldReceiveSearchResults()
         {
             var function = _host.GetInstance<SearchLearningProviders>();
-            var request = new DefaultHttpRequest(new DefaultHttpContext());
-            request.Body = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new SearchRequest{Filter = _searchFilters.ToArray()})));
+            var request = RequestBuilder.CreateRequest()
+                .WithMethod("POST")
+                .WithJsonBody(new SearchRequest {Filter = _searchFilters.ToArray()})
+                .AsHttpRequest();
             var cancellationToken = default(CancellationToken);
             var actual = await function.Run(request, cancellationToken);
             
