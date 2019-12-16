@@ -78,8 +78,10 @@ namespace Dfe.Spi.Search.IntegrationTests.Features
   this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 4
-    testRunner.When("I search for Learning Providers by name", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.Given("the index contains matching documents", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 5
+    testRunner.When("I search for Learning Providers by name", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 6
     testRunner.Then("I should receive search results", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

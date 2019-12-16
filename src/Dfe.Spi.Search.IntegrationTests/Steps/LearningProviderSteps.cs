@@ -23,6 +23,21 @@ namespace Dfe.Spi.Search.IntegrationTests.Steps
     {
         private TestFunctionHost _host = new TestFunctionHost();
         private List<SearchFilter> _searchFilters = new List<SearchFilter>();
+
+        [Given("the index contains matching documents")]
+        public void GivenTheIndexContainsMatchingDocuments()
+        {
+            var index = (InMemoryLearningProviderSearchIndex) _host.GetInstance<ILearningProviderSearchIndex>();
+            index.SetIndexDataset(new []
+            {
+                new LearningProviderSearchDocument
+                {
+                    Name = "Example Provider one",
+                    SourceSystemName = "Test",
+                    SourceSystemId = "T001",
+                }, 
+            });
+        }
         
         [When("I search for Learning Providers by name")]
         public void WhenISearchForLearningProvidersByName()
@@ -46,12 +61,13 @@ namespace Dfe.Spi.Search.IntegrationTests.Steps
             Assert.IsNotNull(actual);
             Assert.IsInstanceOf<OkObjectResult>(actual);
             Assert.IsInstanceOf<SearchResultset<LearningProviderSearchDocument>>(((OkObjectResult)actual).Value);
+            Assert.AreEqual(1, ((SearchResultset<LearningProviderSearchDocument>)((OkObjectResult)actual).Value).Documents?.Length);
         }
 
         [AfterScenario]
         public void AfterScenario()
         {
-            var logger = (ConsoleLoggerWrapper) _host.GetInstance<ILoggerWrapper>();
+            var logger = (InProcLoggerWrapper) _host.GetInstance<ILoggerWrapper>();
             var logs = logger.GetLogs();
             
             Console.WriteLine();
