@@ -25,6 +25,11 @@ ProjectSection(SolutionItems) = preProject
 	..\pipelines\build.yml = ..\pipelines\build.yml
 EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Release", "Release", "{1AE7F121-CCBD-4E59-B070-011AC16F8CCA}"
+ProjectSection(SolutionItems) = preProject
+	..\azure\template.json = ..\azure\template.json
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,5 +70,6 @@ Global
 		{73D97A3B-B952-400B-814E-C49282DF4DA8} = {20AFE215-3D79-4548-ABC4-494650073654}
 		{F9DE801E-7F76-42AA-9485-BF521448502C} = {20AFE215-3D79-4548-ABC4-494650073654}
 		{E9CDBECB-37E3-489C-ABE4-6E82CDC6F6E0} = {4470EF8B-EDF3-4137-8425-70DFD2266FA1}
+		{1AE7F121-CCBD-4E59-B070-011AC16F8CCA} = {4470EF8B-EDF3-4137-8425-70DFD2266FA1}
 	EndGlobalSection
 EndGlobal
