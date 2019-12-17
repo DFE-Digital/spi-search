@@ -37,6 +37,7 @@
   "variables": {
     "namePrefix": "[concat(parameters('serviceIdentifier'), parameters('environment'), parameters('environmentInstance'))]",
     "searchServiceName": "[concat(variables('namePrefix'), '-', parameters('appName'), '-acs-01')]",
+    "searchServiceId": "[concat(resourceGroup().id,'/providers/','Microsoft.Search/searchServices/', variables('searchServiceName'))]",
     "storageAccountName": "[toLower(concat(variables('namePrefix'), parameters('appName')))]",
     "storageAccountId": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
     "servicePlanName": "[concat(variables('namePrefix'), '-', parameters('appName'), '-asp-01')]",
@@ -160,7 +161,7 @@
             },
             {
               "name": "SPI_SearchIndex__AzureCognitiveSearchKey",
-              "value": ""
+              "value": "[listAdminKeys(variables('searchServiceId'), '2015-08-19').PrimaryKey]"
             },
             {
               "name": "SPI_SearchIndex__IndexName",
