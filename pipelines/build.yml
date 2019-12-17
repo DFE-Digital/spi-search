@@ -49,7 +49,7 @@ steps:
       arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
 
   - task: CopyFiles@2
-    displayName: 'Copy ARM template'
+    displayName: 'Copy deployment template and scripts'
     inputs:
       Contents: |
         azure/*

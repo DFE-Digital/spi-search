@@ -28,6 +28,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Release", "Release", "{1AE7F121-CCBD-4E59-B070-011AC16F8CCA}"
 ProjectSection(SolutionItems) = preProject
 	..\azure\template.json = ..\azure\template.json
+	..\azure\CreateSearchIndex.ps1 = ..\azure\CreateSearchIndex.ps1
+	..\azure\spi-learning-providers.schema.json = ..\azure\spi-learning-providers.schema.json
 EndProjectSection
 EndProject
 Global
