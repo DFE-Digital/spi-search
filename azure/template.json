@@ -36,6 +36,7 @@
   },
   "variables": {
     "namePrefix": "[concat(parameters('serviceIdentifier'), parameters('environment'), parameters('environmentInstance'))]",
+    "searchServiceName": "[concat(variables('namePrefix'), '-', parameters('appName'), '-acs-01')]",
     "storageAccountName": "[toLower(concat(variables('namePrefix'), parameters('appName')))]",
     "storageAccountId": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
     "servicePlanName": "[concat(variables('namePrefix'), '-', parameters('appName'), '-asp-01')]",
@@ -44,6 +45,20 @@
     "sharedResourceGroupName": "[concat(variables('namePrefix'), '-shared')]"
   },
   "resources": [
+    {
+      "type": "Microsoft.Search/searchServices",
+      "apiVersion": "2015-08-19",
+      "name": "[variables('searchServiceName')]",
+      "location": "West Europe",
+      "sku": {
+        "name": "basic"
+      },
+      "properties": {
+        "replicaCount": 1,
+        "partitionCount": 1,
+        "hostingMode": "Default"
+      }
+    },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('storageAccountName')]",
@@ -100,7 +115,8 @@
       "kind": "functionapp",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+        "[resourceId('Microsoft.Search/searchServices', variables('searchServiceName'))]"
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
@@ -140,7 +156,7 @@
             },
             {
               "name": "SPI_SearchIndex__AzureCognitiveSearchServiceName",
-              "value": ""
+              "value": "[variables('searchServiceName')]"
             },
             {
               "name": "SPI_SearchIndex__AzureCognitiveSearchKey",
