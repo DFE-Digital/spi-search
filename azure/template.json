@@ -175,5 +175,11 @@
         "app": "[parameters('appName')]"
       }
     }
-  ]
+  ],
+  "outputs": {
+    "searchKey": {
+      "type": "string",
+      "value": "[listAdminKeys(variables('searchServiceId'), '2015-08-19').PrimaryKey]"
+    }
+  }
 }
