@@ -48,6 +48,14 @@ steps:
       projects: 'src/Dfe.Spi.Search.Functions/Dfe.Spi.Search.Functions.csproj'
       arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
 
+  - task: CopyFiles@2
+    displayName: 'Copy deployment template and scripts'
+    inputs:
+      Contents: |
+        azure/*
+      TargetFolder: '$(build.artifactstagingdirectory)/publish'
+      OverWrite: true
+        
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
     inputs:
