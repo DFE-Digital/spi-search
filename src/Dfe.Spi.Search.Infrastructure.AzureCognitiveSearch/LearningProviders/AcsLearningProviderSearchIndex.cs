@@ -68,7 +68,10 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                 var query = $"Name: \"{nameFilter.Value}\"";
                 _logger.Info($"Search ACS with query {query}...");
 
-                var results = await client.Documents.SearchAsync<AcsLearningProviderDocument>(query, cancellationToken: cancellationToken);
+                var results = await client.Documents.SearchAsync<AcsLearningProviderDocument>(
+                    query,
+                    new SearchParameters { QueryType = QueryType.Full },
+                    cancellationToken: cancellationToken);
                 var documents = results.Results.Select(acs => new LearningProviderSearchDocument
                 {
                     Name = acs.Document.Name,
