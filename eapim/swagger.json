@@ -1,0 +1,102 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Search Service API",
+    "version": "2.0",
+    "description": "SPI middleware component: provides search services to the GraphQL API."
+  },
+  "host": "__function_app_host__",
+  "paths": {
+    "/learning-providers": {
+      "get": {
+        "description": "Returns a single learning provider, based on its id.",
+        "operationId": "get-learning-provider",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "The id of the learning provider to return.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer token authentication.",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "X-Internal-Request-Id",
+            "type": "string",
+            "description": "An internal request id. Should be a vaild guid.",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "X-External-Request-Id",
+            "description": "An optional external request id. Used in logging.",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The learning provider exists, and is part of the body of the response.",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "No learning provider exists for the given id.",
+            "schema": {
+              "$ref": "#/definitions/http-error-body"
+            }
+          }
+        }
+      }
+    },
+    "/HeartBeat": {
+      "get": {
+        "description": "Standard diagnostics method, used to test the health of the facade's underlying system.",
+        "operationId": "heart-beat",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Bearer token authentication.",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The standard/only response from the method."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "http-error-body": {
+      "type": "object",
+      "properties": {
+        "errorIdentifier": {
+          "type": "string",
+          "description": "An error identifier.",
+          "example": "SPI-UKRLPA-2"
+        },
+        "message": {
+          "type": "string",
+          "description": "A message describing the error.",
+          "example": "Could not find a learning provider for id 12345."
+        },
+        "statusCode": {
+          "type": "integer",
+          "description": "The status code thrown with the error.",
+          "example": 404
+        }
+      }
+    }
+  }
+}
