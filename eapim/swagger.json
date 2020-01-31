@@ -8,15 +8,16 @@
   "host": "__function_app_host__",
   "paths": {
     "/learning-providers": {
-      "get": {
-        "description": "Returns a single learning provider, based on its id.",
-        "operationId": "get-learning-provider",
+      "post": {
+        "description": "Performs a search against learning providers.",
+        "operationId": "search-learning-providers",
         "parameters": [
           {
-            "in": "path",
-            "name": "id",
-            "type": "string",
-            "description": "The id of the learning provider to return.",
+            "in": "body",
+            "name": "Search Request",
+            "schema": {
+              "type": "object"
+            },
             "required": true
           },
           {
@@ -42,15 +43,9 @@
         ],
         "responses": {
           "200": {
-            "description": "The learning provider exists, and is part of the body of the response.",
+            "description": "The search executed successfully, and results are included in the body.",
             "schema": {
               "type": "object"
-            }
-          },
-          "404": {
-            "description": "No learning provider exists for the given id.",
-            "schema": {
-              "$ref": "#/definitions/http-error-body"
             }
           }
         }
@@ -73,28 +68,6 @@
           "200": {
             "description": "The standard/only response from the method."
           }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "http-error-body": {
-      "type": "object",
-      "properties": {
-        "errorIdentifier": {
-          "type": "string",
-          "description": "An error identifier.",
-          "example": "SPI-UKRLPA-2"
-        },
-        "message": {
-          "type": "string",
-          "description": "A message describing the error.",
-          "example": "Could not find a learning provider for id 12345."
-        },
-        "statusCode": {
-          "type": "integer",
-          "description": "The status code thrown with the error.",
-          "example": 404
         }
       }
     }
