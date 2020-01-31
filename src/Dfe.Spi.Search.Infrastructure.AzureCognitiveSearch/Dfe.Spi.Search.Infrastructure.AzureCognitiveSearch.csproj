@@ -9,7 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Dfe.Spi.Common.Logging" Version="1.0.5" />
+      <PackageReference Include="Dfe.Spi.Common.Logging" Version="1.0.9" />
       <PackageReference Include="Microsoft.Azure.Search" Version="10.1.0" />
     </ItemGroup>
 

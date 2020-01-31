@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Dfe.Spi.Common.Logging.Definitions;
+using Dfe.Spi.Common.WellKnownIdentifiers;
+using Dfe.Spi.Models;
 using Dfe.Spi.Search.Domain.Common;
 using Dfe.Spi.Search.Domain.LearningProviders;
 
@@ -12,6 +14,8 @@ namespace Dfe.Spi.Search.Application.LearningProviders
     {
         Task<SearchResultset<LearningProviderSearchDocument>> SearchAsync(SearchRequest request,
             CancellationToken cancellationToken);
+
+        Task SyncAsync(LearningProvider learningProvider, string source, CancellationToken cancellationToken);
     }
 
     public class LearningProviderSearchManager : ILearningProviderSearchManager
@@ -35,10 +39,14 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             return await _searchIndex.SearchAsync(request, cancellationToken);
         }
 
+        public async Task SyncAsync(LearningProvider learningProvider, string source, CancellationToken cancellationToken)
+        {
+            var searchDocument = MapLearningProviderToSearchDocument(learningProvider, source);
 
-        
-        
-        
+            await _searchIndex.UploadBatchAsync(new[] {searchDocument}, cancellationToken);
+        }
+
+
         private static readonly string[] FieldsValidForFiltering = new[] {"Name"};
 
         private void EnsureSearchRequestIsValid(SearchRequest request)
@@ -66,6 +74,26 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             {
                 throw new InvalidRequestException(validationProblems.ToArray());
             }
+        }
+
+        private LearningProviderSearchDocument MapLearningProviderToSearchDocument(LearningProvider learningProvider, string source)
+        {
+            var searchDocument = new LearningProviderSearchDocument
+            {
+                SourceSystemName = source,
+                Name = learningProvider.Name,
+            };
+
+            if (source == SourceSystemNames.UkRegisterOfLearningProviders)
+            {
+                searchDocument.SourceSystemId = learningProvider.Ukprn.ToString();
+            }
+            else
+            {
+                searchDocument.SourceSystemId = learningProvider.Urn.ToString();
+            }
+            
+            return searchDocument;
         }
     }
 }
