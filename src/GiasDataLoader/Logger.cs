@@ -13,14 +13,28 @@ namespace GiasDataLoader
         {
         }
 
-        public void Debug(string message)
+        public void Debug(string message, Exception exception = null)
         {
-            Console.WriteLine(message);
+            if (exception == null)
+            {
+                Console.WriteLine(message);
+            }
+            else
+            {
+                Console.WriteLine(message + "\n" + exception.ToString());
+            }
         }
 
-        public void Info(string message)
+        public void Info(string message, Exception exception = null)
         {
-            Console.WriteLine(message);
+            if (exception == null)
+            {
+                Console.WriteLine(message);
+            }
+            else
+            {
+                Console.WriteLine(message + "\n" + exception.ToString());
+            }
         }
 
         public void Warning(string message)
