@@ -7,6 +7,7 @@ using Dfe.Spi.Common.WellKnownIdentifiers;
 using Dfe.Spi.Models;
 using Dfe.Spi.Search.Domain.Common;
 using Dfe.Spi.Search.Domain.LearningProviders;
+using Newtonsoft.Json;
 
 namespace Dfe.Spi.Search.Application.LearningProviders
 {
@@ -42,8 +43,10 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         public async Task SyncAsync(LearningProvider learningProvider, string source, CancellationToken cancellationToken)
         {
             var searchDocument = MapLearningProviderToSearchDocument(learningProvider, source);
+            _logger.Info($"Mapped learning provider to search document: {JsonConvert.SerializeObject(searchDocument)}");
 
             await _searchIndex.UploadBatchAsync(new[] {searchDocument}, cancellationToken);
+            _logger.Debug($"Successfully uploaded document to search index");
         }
 
 
