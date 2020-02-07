@@ -21,6 +21,8 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
         public void Arrange()
         {
             _searchIndexMock = new Mock<ILearningProviderSearchIndex>();
+            _searchIndexMock.Setup(i => i.GetSearchableFieldsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new[] {"Name"});
 
             _loggerMock = new Mock<ILoggerWrapper>();
 
@@ -39,7 +41,7 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
                     new SearchFilter {Field = "Name"},
                 },
             };
-            
+
             await _manager.SearchAsync(request, _cancellationToken);
 
             _searchIndexMock.Verify(i => i.SearchAsync(request, _cancellationToken),
@@ -84,6 +86,8 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
                 await _manager.SearchAsync(request, _cancellationToken));
             AssertInvalidRequestHasReason(actual, "SomeField is not a valid field for filtering");
             AssertInvalidRequestHasReason(actual, "AnotherField is not a valid field for filtering");
+            _searchIndexMock.Verify(i => i.GetSearchableFieldsAsync(_cancellationToken),
+                Times.Once);
         }
 
         private void AssertInvalidRequestHasReason(InvalidRequestException ex, string expectedReason)
