@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -35,7 +36,7 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         public async Task<SearchResultset<LearningProviderSearchDocument>> SearchAsync(SearchRequest request,
             CancellationToken cancellationToken)
         {
-            EnsureSearchRequestIsValid(request);
+            await EnsureSearchRequestIsValid(request, cancellationToken);
 
             return await _searchIndex.SearchAsync(request, cancellationToken);
         }
@@ -50,9 +51,7 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         }
 
 
-        private static readonly string[] FieldsValidForFiltering = new[] {"Name"};
-
-        private void EnsureSearchRequestIsValid(SearchRequest request)
+        private async Task EnsureSearchRequestIsValid(SearchRequest request, CancellationToken cancellationToken)
         {
             if (request == null)
             {
@@ -65,9 +64,10 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             }
 
             var validationProblems = new List<string>();
+            var searchableFields = await _searchIndex.GetSearchableFieldsAsync(cancellationToken);
             foreach (var filter in request.Filter)
             {
-                if (!FieldsValidForFiltering.Any(f => f == filter.Field))
+                if (!searchableFields.Any(f => f.Equals(filter.Field, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     validationProblems.Add($"{filter.Field} is not a valid field for filtering");
                 }
