@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using AutoFixture.NUnit3;
 using Dfe.Spi.Common.Logging.Definitions;
 using Dfe.Spi.Common.UnitTesting.Fixtures;
 using Dfe.Spi.Common.WellKnownIdentifiers;
@@ -94,7 +93,16 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
             _searchIndexMock.Verify(i => i.UploadBatchAsync(
                     It.Is<LearningProviderSearchDocument[]>(a =>
                         a.Length == 1 &&
-                        a[0].Name == learningProvider.Name),
+                        a[0].Name == learningProvider.Name &&
+                        a[0].Urn == learningProvider.Urn &&
+                        a[0].Ukprn == learningProvider.Ukprn &&
+                        a[0].Uprn == learningProvider.Uprn &&
+                        a[0].CompaniesHouseNumber == learningProvider.CompaniesHouseNumber &&
+                        a[0].CharitiesCommissionNumber == learningProvider.CharitiesCommissionNumber &&
+                        a[0].AcademyTrustCode == learningProvider.AcademyTrustCode &&
+                        a[0].DfeNumber == learningProvider.DfeNumber &&
+                        a[0].EstablishmentNumber == learningProvider.EstablishmentNumber &&
+                        a[0].PreviousEstablishmentNumber == learningProvider.PreviousEstablishmentNumber),
                     _cancellationToken),
                 Times.Once);
         }

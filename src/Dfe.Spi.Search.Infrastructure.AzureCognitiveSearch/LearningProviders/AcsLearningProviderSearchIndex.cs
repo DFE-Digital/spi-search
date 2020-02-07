@@ -45,6 +45,15 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                 {
                     Id = $"{d.SourceSystemName}-{d.SourceSystemId}",
                     Name = d.Name,
+                    Urn = d.Urn,
+                    Ukprn = d.Ukprn,
+                    Uprn = d.Uprn,
+                    CompaniesHouseNumber = d.CompaniesHouseNumber,
+                    CharitiesCommissionNumber = d.CharitiesCommissionNumber,
+                    AcademyTrustCode = d.AcademyTrustCode,
+                    DfeNumber = d.DfeNumber,
+                    EstablishmentNumber = d.EstablishmentNumber,
+                    PreviousEstablishmentNumber = d.PreviousEstablishmentNumber,
                     SourceSystemName = d.SourceSystemName,
                     SourceSystemId = d.SourceSystemId,
                 }));

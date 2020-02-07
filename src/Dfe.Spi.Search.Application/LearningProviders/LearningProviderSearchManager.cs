@@ -85,6 +85,15 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             {
                 SourceSystemName = source,
                 Name = learningProvider.Name,
+                Urn = learningProvider.Urn,
+                Ukprn = learningProvider.Ukprn,
+                Uprn = learningProvider.Uprn,
+                CompaniesHouseNumber = learningProvider.CompaniesHouseNumber,
+                CharitiesCommissionNumber = learningProvider.CharitiesCommissionNumber,
+                AcademyTrustCode = learningProvider.AcademyTrustCode,
+                DfeNumber = learningProvider.DfeNumber,
+                EstablishmentNumber = learningProvider.EstablishmentNumber,
+                PreviousEstablishmentNumber = learningProvider.PreviousEstablishmentNumber,
             };
 
             if (source == SourceSystemNames.UkRegisterOfLearningProviders)
