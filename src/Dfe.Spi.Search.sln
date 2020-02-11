@@ -30,6 +30,7 @@ ProjectSection(SolutionItems) = preProject
 	..\azure\template.json = ..\azure\template.json
 	..\azure\CreateSearchIndex.ps1 = ..\azure\CreateSearchIndex.ps1
 	..\azure\spi-learning-providers.schema.json = ..\azure\spi-learning-providers.schema.json
+	..\eventing\SubscribeToEvent.ps1 = ..\eventing\SubscribeToEvent.ps1
 EndProjectSection
 EndProject
 Global
