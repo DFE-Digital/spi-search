@@ -1,3 +1,4 @@
+using System;
 using Dfe.Spi.Search.Domain.Common;
 
 namespace Dfe.Spi.Search.Domain.LearningProviders
@@ -5,6 +6,11 @@ namespace Dfe.Spi.Search.Domain.LearningProviders
     public class LearningProviderSearchDocument : SearchDocument
     {
         public virtual string Name { get; set; }
+        public virtual string Type { get; set; }
+        public virtual string SubType { get; set; }
+        public virtual string Status { get; set; }
+        public virtual DateTime? OpenDate { get; set; }
+        public virtual DateTime? CloseDate { get; set; }
         public virtual long? Urn { get; set; }
         public virtual long? Ukprn { get; set; }
         public virtual string Uprn { get; set; }

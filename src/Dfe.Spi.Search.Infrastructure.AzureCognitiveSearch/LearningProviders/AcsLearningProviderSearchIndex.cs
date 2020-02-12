@@ -77,6 +77,11 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                 {
                     Id = $"{d.SourceSystemName}-{d.SourceSystemId}",
                     Name = d.Name,
+                    Type = d.Type,
+                    SubType = d.SubType,
+                    Status = d.Status,
+                    OpenDate = d.OpenDate,
+                    CloseDate = d.CloseDate,
                     Urn = d.Urn,
                     Ukprn = d.Ukprn,
                     Uprn = d.Uprn,
@@ -113,6 +118,11 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                 var documents = results.Results.Select(acs => new LearningProviderSearchDocument
                 {
                     Name = acs.Document.Name,
+                    Type = acs.Document.Type,
+                    SubType = acs.Document.SubType,
+                    Status = acs.Document.Status,
+                    OpenDate = acs.Document.OpenDate,
+                    CloseDate = acs.Document.CloseDate,
                     Urn = acs.Document.Urn,
                     Ukprn = acs.Document.Ukprn,
                     Uprn = acs.Document.Uprn,

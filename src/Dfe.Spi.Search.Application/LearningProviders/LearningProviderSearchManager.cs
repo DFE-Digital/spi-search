@@ -85,6 +85,11 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             {
                 SourceSystemName = source,
                 Name = learningProvider.Name,
+                Type = learningProvider.Type,
+                SubType = learningProvider.SubType,
+                Status = learningProvider.Status,
+                OpenDate = learningProvider.OpenDate,
+                CloseDate = learningProvider.CloseDate,
                 Urn = learningProvider.Urn,
                 Ukprn = learningProvider.Ukprn,
                 Uprn = learningProvider.Uprn,
