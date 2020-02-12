@@ -10,7 +10,7 @@
 
     <ItemGroup>
       <PackageReference Include="Dfe.Spi.Common.Logging" Version="1.0.9" />
-      <PackageReference Include="Dfe.Spi.Models" Version="1.0.10" />
+      <PackageReference Include="Dfe.Spi.Models" Version="1.0.12" />
       <PackageReference Include="Dfe.Spi.Common.WellKnownIdentifiers" Version="1.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     </ItemGroup>
