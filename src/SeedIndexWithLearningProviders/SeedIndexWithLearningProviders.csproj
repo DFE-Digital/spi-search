@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <LangVersion>7.1</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.6.0" />
+        <PackageReference Include="CsvHelper" Version="12.2.2" />
+        <PackageReference Include="Dfe.Spi.Common.Logging" Version="1.1.0" />
+        <PackageReference Include="Dfe.Spi.Common.WellKnownIdentifiers" Version="1.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.0" />
+        <PackageReference Include="RestSharp" Version="106.6.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Dfe.Spi.Search.Application\Dfe.Spi.Search.Application.csproj" />
+      <ProjectReference Include="..\Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch\Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -22,7 +22,7 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
         {
             _searchIndexMock = new Mock<ILearningProviderSearchIndex>();
             _searchIndexMock.Setup(i => i.GetSearchableFieldsAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new[] {"Name"});
+                .ReturnsAsync(new[] {"Name", "Type", "OpenDate"});
 
             _loggerMock = new Mock<ILoggerWrapper>();
 
@@ -45,6 +45,28 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
             await _manager.SearchAsync(request, _cancellationToken);
 
             _searchIndexMock.Verify(i => i.SearchAsync(request, _cancellationToken),
+                Times.Once);
+        }
+
+        [TestCase("Name", Operators.Contains)]
+        [TestCase("Type", Operators.Equals)]
+        [TestCase("OpenDate", Operators.Equals)]
+        public async Task ThenItShouldDefaultFilterOperatorIfNotSpecified(string field, string defaultOperator)
+        {
+            var request = new SearchRequest
+            {
+                Filter = new[]
+                {
+                    new SearchFilter {Field = field},
+                },
+            };
+
+            await _manager.SearchAsync(request, _cancellationToken);
+
+            _searchIndexMock.Verify(i => i.SearchAsync(
+                    It.Is<SearchRequest>(r=>
+                        r.Filter[0].Operator == defaultOperator), 
+                    _cancellationToken),
                 Times.Once);
         }
 
@@ -90,6 +112,26 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
                 Times.Once);
         }
 
+        [Test]
+        public void ThenItShouldThrowInvalidRequestExceptionIfSearchRequestHasFilterWithInvalidOperator()
+        {
+            var request = new SearchRequest
+            {
+                Filter = new[]
+                {
+                    new SearchFilter {Field = "Name", Operator = Operators.GreaterThan},
+                },
+            };
+
+            var actual = Assert.ThrowsAsync<InvalidRequestException>(async () =>
+                await _manager.SearchAsync(request, _cancellationToken));
+            AssertInvalidRequestHasReason(actual, "Operator greaterthan is not valid for Name");
+            _searchIndexMock.Verify(i => i.GetSearchableFieldsAsync(_cancellationToken),
+                Times.Once);
+        }
+
+        
+        
         private void AssertInvalidRequestHasReason(InvalidRequestException ex, string expectedReason)
         {
             var reasonsString = ex.Reasons == null

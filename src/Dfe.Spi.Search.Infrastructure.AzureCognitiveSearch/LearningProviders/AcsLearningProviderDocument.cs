@@ -1,3 +1,4 @@
+using System;
 using Dfe.Spi.Search.Domain.LearningProviders;
 using Microsoft.Azure.Search;
 
@@ -8,8 +9,30 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
         [System.ComponentModel.DataAnnotations.Key]
         public string Id { get; set; }
         
+        
         [IsSearchable, IsSortable]
         public override string Name { get; set; }
+        
+        
+        [IsFilterable, IsSortable]
+        public override string Type { get; set; }
+        
+        
+        [IsFilterable, IsSortable]
+        public override string SubType { get; set; }
+        
+        
+        [IsFilterable, IsSortable]
+        public override string Status { get; set; }
+        
+        
+        [IsFilterable, IsSortable]
+        public override DateTime? OpenDate { get; set; }
+        
+        
+        [IsFilterable, IsSortable]
+        public override DateTime? CloseDate { get; set; }
+        
         
         [IsFilterable, IsSortable]
         public override long? Urn { get; set; }

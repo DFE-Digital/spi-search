@@ -94,6 +94,11 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
                     It.Is<LearningProviderSearchDocument[]>(a =>
                         a.Length == 1 &&
                         a[0].Name == learningProvider.Name &&
+                        a[0].Type == learningProvider.Type &&
+                        a[0].SubType == learningProvider.SubType &&
+                        a[0].Status == learningProvider.Status &&
+                        a[0].OpenDate == learningProvider.OpenDate &&
+                        a[0].CloseDate == learningProvider.CloseDate &&
                         a[0].Urn == learningProvider.Urn &&
                         a[0].Ukprn == learningProvider.Ukprn &&
                         a[0].Uprn == learningProvider.Uprn &&
