@@ -18,6 +18,8 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             CancellationToken cancellationToken);
 
         Task SyncAsync(LearningProvider learningProvider, string source, CancellationToken cancellationToken);
+
+        Task SyncBatchAsync(LearningProvider[] learningProvider, string source, CancellationToken cancellationToken);
     }
 
     public class LearningProviderSearchManager : ILearningProviderSearchManager
@@ -47,6 +49,16 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             _logger.Info($"Mapped learning provider to search document: {JsonConvert.SerializeObject(searchDocument)}");
 
             await _searchIndex.UploadBatchAsync(new[] {searchDocument}, cancellationToken);
+            _logger.Debug($"Successfully uploaded document to search index");
+        }
+
+        public async Task SyncBatchAsync(LearningProvider[] learningProviders, string source, CancellationToken cancellationToken)
+        {
+            var searchDocuments =
+                learningProviders.Select(x => MapLearningProviderToSearchDocument(x, source)).ToArray();
+            _logger.Info($"Mapped {learningProviders.Length} learning providers to {searchDocuments.Length} search documents");
+
+            await _searchIndex.UploadBatchAsync(searchDocuments, cancellationToken);
             _logger.Debug($"Successfully uploaded document to search index");
         }
 
