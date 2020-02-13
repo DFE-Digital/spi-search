@@ -159,7 +159,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                 }
                 else if (definition.IsFilterable)
                 {
-                    search.AppendFilter(definition, requestFilter.Value);
+                    search.AppendFilter(definition, requestFilter.Operator, requestFilter.Value);
                 }
                 else
                 {
@@ -229,15 +229,37 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
             }
         }
 
-        public void AppendFilter(SearchFieldDefinition field, string value)
+        public void AppendFilter(SearchFieldDefinition field, string filterOperator, string value)
         {
-            if (IsNumericType(field.DataType))
+            if (filterOperator == Operators.In)
             {
-                AppendFilter($"{field.Name} eq {value}");
+                var values = value.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
+                var conditionValue = values.Aggregate((x, y) => $"{x},{y}");
+                AppendFilter($"search.in({field.Name}, '{conditionValue}', ',')");
             }
             else
             {
-                AppendFilter($"{field.Name} eq '{value}'");
+                string conditionValue;
+                if (IsNumericType(field.DataType))
+                {
+                    conditionValue = value;
+                }
+                else if (IsDateType(field.DataType))
+                {
+                    DateTime dtm;
+                    if (!DateTime.TryParse(value, out dtm))
+                    {
+                        throw new Exception($"{value} is not a valid date/time value for {field.Name}");
+                    }
+
+                    conditionValue = dtm.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+                }
+                else
+                {
+                    conditionValue = $"'{value}'";
+                }
+                var acsOperator = OperatorMappings[filterOperator.ToLower()];
+                AppendFilter($"{field.Name} {acsOperator} {conditionValue}");
             }
         }
         public void AppendFilter(string value)
@@ -259,5 +281,20 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                    type == typeof(long) ||
                    type == typeof(long?);
         }
+
+        private bool IsDateType(Type type)
+        {
+            return type == typeof(DateTime) ||
+                   type == typeof(DateTime?);
+        }
+
+        private static readonly Dictionary<string, string> OperatorMappings = new Dictionary<string, string>
+        {
+            {Operators.Equals.ToLower(), "eq"},
+            {Operators.GreaterThan.ToLower(), "gt"},
+            {Operators.GreaterThanOrEqualTo.ToLower(), "ge"},
+            {Operators.LessThan.ToLower(), "lt"},
+            {Operators.LessThanOrEqualTo.ToLower(), "le"},
+        };
     }
 }
