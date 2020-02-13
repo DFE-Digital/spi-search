@@ -38,12 +38,14 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         public async Task<SearchResultset<LearningProviderSearchDocument>> SearchAsync(SearchRequest request,
             CancellationToken cancellationToken)
         {
+
             await EnsureSearchRequestIsValid(request, cancellationToken);
 
             return await _searchIndex.SearchAsync(request, cancellationToken);
         }
 
-        public async Task SyncAsync(LearningProvider learningProvider, string source, CancellationToken cancellationToken)
+        public async Task SyncAsync(LearningProvider learningProvider, string source,
+            CancellationToken cancellationToken)
         {
             var searchDocument = MapLearningProviderToSearchDocument(learningProvider, source);
             _logger.Info($"Mapped learning provider to search document: {JsonConvert.SerializeObject(searchDocument)}");
@@ -52,11 +54,13 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             _logger.Debug($"Successfully uploaded document to search index");
         }
 
-        public async Task SyncBatchAsync(LearningProvider[] learningProviders, string source, CancellationToken cancellationToken)
+        public async Task SyncBatchAsync(LearningProvider[] learningProviders, string source,
+            CancellationToken cancellationToken)
         {
             var searchDocuments =
                 learningProviders.Select(x => MapLearningProviderToSearchDocument(x, source)).ToArray();
-            _logger.Info($"Mapped {learningProviders.Length} learning providers to {searchDocuments.Length} search documents");
+            _logger.Info(
+                $"Mapped {learningProviders.Length} learning providers to {searchDocuments.Length} search documents");
 
             await _searchIndex.UploadBatchAsync(searchDocuments, cancellationToken);
             _logger.Debug($"Successfully uploaded document to search index");
@@ -79,9 +83,17 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             var searchableFields = await _searchIndex.GetSearchableFieldsAsync(cancellationToken);
             foreach (var filter in request.Filter)
             {
+                filter.Operator = filter.Operator ?? GetDefaultOperatorForField(filter.Field);
+                
                 if (!searchableFields.Any(f => f.Equals(filter.Field, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     validationProblems.Add($"{filter.Field} is not a valid field for filtering");
+                }
+
+                var validOperators = GetValidOperatorsForField(filter.Field);
+                if (!validOperators.Any(o => o.Equals(filter.Operator, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    validationProblems.Add($"Operator {filter.Operator} is not valid for {filter.Field}");
                 }
             }
 
@@ -91,7 +103,36 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             }
         }
 
-        private LearningProviderSearchDocument MapLearningProviderToSearchDocument(LearningProvider learningProvider, string source)
+        private string GetDefaultOperatorForField(string field)
+        {
+            switch (field.ToLower())
+            {
+                case "name":
+                    return Operators.Contains;
+                default:
+                    return Operators.Equals;
+            }
+        }
+        private string[] GetValidOperatorsForField(string field)
+        {
+            switch (field.ToLower())
+            {
+                case "name":
+                    return NonFilterableOperators;
+                case "type":
+                case "subtype":
+                case "status":
+                    return EnumOperators;
+                case "opendate":
+                case "closedate":
+                    return DateOperators;
+                default:
+                    return StringOperators;
+            }
+        }
+
+        private LearningProviderSearchDocument MapLearningProviderToSearchDocument(LearningProvider learningProvider,
+            string source)
         {
             var searchDocument = new LearningProviderSearchDocument
             {
@@ -121,8 +162,32 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             {
                 searchDocument.SourceSystemId = learningProvider.Urn.ToString();
             }
-            
+
             return searchDocument;
         }
+
+
+
+        private static readonly string[] NonFilterableOperators = new[]
+        {
+            Operators.Contains,
+        };
+        private static readonly string[] EnumOperators = new[]
+        {
+            Operators.Equals, 
+            Operators.In,
+        };
+        private static readonly string[] DateOperators = new[]
+        {
+            Operators.Equals, 
+            Operators.GreaterThan,
+            Operators.GreaterThanOrEqualTo,
+            Operators.LessThan,
+            Operators.LessThanOrEqualTo,
+        };
+        private static readonly string[] StringOperators = new[]
+        {
+            Operators.Equals, 
+        };
     }
 }
