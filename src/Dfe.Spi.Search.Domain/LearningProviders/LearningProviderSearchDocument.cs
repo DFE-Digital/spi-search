@@ -20,5 +20,7 @@ namespace Dfe.Spi.Search.Domain.LearningProviders
         public virtual string DfeNumber { get; set; }
         public virtual long? EstablishmentNumber { get; set; }
         public virtual long? PreviousEstablishmentNumber { get; set; }
+        public virtual string ManagementGroupType { get; set; }
+        public virtual string ManagementGroupId { get; set; }
     }
 }

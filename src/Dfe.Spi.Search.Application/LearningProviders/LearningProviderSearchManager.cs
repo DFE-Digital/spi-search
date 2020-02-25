@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dfe.Spi.Common.Logging.Definitions;
 using Dfe.Spi.Common.WellKnownIdentifiers;
-using Dfe.Spi.Models;
+using Dfe.Spi.Models.Entities;
 using Dfe.Spi.Search.Domain.Common;
 using Dfe.Spi.Search.Domain.LearningProviders;
 using Newtonsoft.Json;
@@ -152,6 +152,8 @@ namespace Dfe.Spi.Search.Application.LearningProviders
                 DfeNumber = learningProvider.DfeNumber,
                 EstablishmentNumber = learningProvider.EstablishmentNumber,
                 PreviousEstablishmentNumber = learningProvider.PreviousEstablishmentNumber,
+                ManagementGroupType = learningProvider.ManagementGroup?.Type,
+                ManagementGroupId = learningProvider.ManagementGroup?.Identifier,
             };
 
             if (source == SourceSystemNames.UkRegisterOfLearningProviders)

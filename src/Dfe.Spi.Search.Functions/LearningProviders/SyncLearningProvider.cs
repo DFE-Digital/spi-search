@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Dfe.Spi.Common.Logging.Definitions;
-using Dfe.Spi.Models;
+using Dfe.Spi.Models.Entities;
 using Dfe.Spi.Search.Application.LearningProviders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
