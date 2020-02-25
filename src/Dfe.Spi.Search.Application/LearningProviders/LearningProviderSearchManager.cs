@@ -122,6 +122,7 @@ namespace Dfe.Spi.Search.Application.LearningProviders
                 case "type":
                 case "subtype":
                 case "status":
+                case "managementgrouptype":
                     return EnumOperators;
                 case "opendate":
                 case "closedate":
