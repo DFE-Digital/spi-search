@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
-using Dfe.Spi.Models;
+using Dfe.Spi.Models.Entities;
 using Dfe.Spi.Search.Application.LearningProviders;
 using Dfe.Spi.Search.Domain.Configuration;
 using Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders;

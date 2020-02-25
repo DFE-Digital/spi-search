@@ -91,6 +91,8 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                     DfeNumber = d.DfeNumber,
                     EstablishmentNumber = d.EstablishmentNumber,
                     PreviousEstablishmentNumber = d.PreviousEstablishmentNumber,
+                    ManagementGroupType = d.ManagementGroupType,
+                    ManagementGroupId = d.ManagementGroupId,
                     SourceSystemName = d.SourceSystemName,
                     SourceSystemId = d.SourceSystemId,
                 }));
@@ -132,6 +134,8 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                     DfeNumber = acs.Document.DfeNumber,
                     EstablishmentNumber = acs.Document.EstablishmentNumber,
                     PreviousEstablishmentNumber = acs.Document.PreviousEstablishmentNumber,
+                    ManagementGroupType = acs.Document.ManagementGroupType,
+                    ManagementGroupId = acs.Document.ManagementGroupId,
                     SourceSystemName = acs.Document.SourceSystemName,
                     SourceSystemId = acs.Document.SourceSystemId,
                 }).ToArray();
