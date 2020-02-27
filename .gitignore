@@ -63,6 +63,7 @@ artifacts/
 
 # Azure Functions
 **/local.settings.json
+launchSettings.json
 
 # StyleCop
 StyleCopReport.xml

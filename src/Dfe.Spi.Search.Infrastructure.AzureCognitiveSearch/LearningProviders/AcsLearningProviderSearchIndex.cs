@@ -258,6 +258,10 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
 
                     conditionValue = dtm.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
                 }
+                else if (filterOperator == Operators.IsNull || filterOperator == Operators.IsNotNull)
+                {
+                    conditionValue = "null";
+                }
                 else
                 {
                     conditionValue = $"'{value}'";
@@ -299,6 +303,8 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
             {Operators.GreaterThanOrEqualTo.ToLower(), "ge"},
             {Operators.LessThan.ToLower(), "lt"},
             {Operators.LessThanOrEqualTo.ToLower(), "le"},
+            {Operators.IsNull.ToLower(), "eq"},
+            {Operators.IsNotNull.ToLower(), "ne"}
         };
     }
 }
