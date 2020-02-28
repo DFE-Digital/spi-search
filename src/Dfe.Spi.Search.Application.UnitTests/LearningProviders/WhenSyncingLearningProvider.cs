@@ -105,9 +105,7 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
                         a[0].CompaniesHouseNumber == learningProvider.CompaniesHouseNumber &&
                         a[0].CharitiesCommissionNumber == learningProvider.CharitiesCommissionNumber &&
                         a[0].AcademyTrustCode == learningProvider.AcademyTrustCode &&
-                        a[0].DfeNumber == learningProvider.DfeNumber &&
-                        a[0].EstablishmentNumber == learningProvider.EstablishmentNumber &&
-                        a[0].PreviousEstablishmentNumber == learningProvider.PreviousEstablishmentNumber),
+                        a[0].DfeNumber == learningProvider.DfeNumber),
                     _cancellationToken),
                 Times.Once);
         }
