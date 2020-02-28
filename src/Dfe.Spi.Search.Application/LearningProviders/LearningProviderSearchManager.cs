@@ -164,13 +164,6 @@ namespace Dfe.Spi.Search.Application.LearningProviders
                     break;
             }
 
-            // NOTE: *If* we introduce another SEARCHABLE type, ensure that you
-            //       *exclude* the field from having null-checking.
-            if (fieldLower != NameField)
-            {
-                toReturn = toReturn.Concat(NullCheckingOperators).ToArray();
-            }
-
             return toReturn;
         }
 
@@ -221,6 +214,8 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         {
             Operators.Equals,
             Operators.In,
+            Operators.IsNull,
+            Operators.IsNotNull,
         };
 
         private static readonly string[] DateOperators = new[]
@@ -230,15 +225,13 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             Operators.GreaterThanOrEqualTo,
             Operators.LessThan,
             Operators.LessThanOrEqualTo,
+            Operators.IsNull,
+            Operators.IsNotNull,
         };
 
         private static readonly string[] StringOperators = new[]
         {
             Operators.Equals,
-        };
-
-        private static readonly string[] NullCheckingOperators = new[]
-        {
             Operators.IsNull,
             Operators.IsNotNull,
         };
