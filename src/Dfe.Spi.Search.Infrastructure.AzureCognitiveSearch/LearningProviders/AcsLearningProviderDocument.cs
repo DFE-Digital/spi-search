@@ -55,6 +55,9 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
         [IsFilterable, IsSortable] 
         public override string DfeNumber { get; set; }
 
+        [IsFilterable, IsSortable]
+        public override string LocalAuthorityCode { get; set; }
+
         [IsFilterable, IsSortable] 
         public override long? EstablishmentNumber { get; set; }
 
