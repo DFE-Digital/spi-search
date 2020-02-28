@@ -286,28 +286,30 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                 else
                 {
                     string conditionValue;
-                    if (IsNumericType(field.DataType))
-                    {
-                        conditionValue = value;
-                    }
-                    else if (IsDateType(field.DataType))
-                    {
-                        DateTime dtm;
-                        if (!DateTime.TryParse(value, out dtm))
-                        {
-                            throw new Exception($"{value} is not a valid date/time value for {field.Name}");
-                        }
-
-                        conditionValue = dtm.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
-                    }
-                    else
-                    {
-                        conditionValue = $"'{value}'";
-                    }
-
                     if (filterOperator == Operators.IsNull || filterOperator == Operators.IsNotNull)
                     {
                         conditionValue = "null";
+                    }
+                    else
+                    {
+                        if (IsNumericType(field.DataType))
+                        {
+                            conditionValue = value;
+                        }
+                        else if (IsDateType(field.DataType))
+                        {
+                            DateTime dtm;
+                            if (!DateTime.TryParse(value, out dtm))
+                            {
+                                throw new Exception($"{value} is not a valid date/time value for {field.Name}");
+                            }
+
+                            conditionValue = dtm.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+                        }
+                        else
+                        {
+                            conditionValue = $"'{value}'";
+                        }
                     }
 
                     var acsOperator = OperatorMappings[filterOperator.ToLower()];
