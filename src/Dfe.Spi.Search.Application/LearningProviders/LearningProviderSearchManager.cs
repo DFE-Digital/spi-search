@@ -185,8 +185,6 @@ namespace Dfe.Spi.Search.Application.LearningProviders
                 AcademyTrustCode = learningProvider.AcademyTrustCode,
                 DfeNumber = learningProvider.DfeNumber,
                 LocalAuthorityCode = learningProvider.LocalAuthorityCode,
-                EstablishmentNumber = learningProvider.EstablishmentNumber,
-                PreviousEstablishmentNumber = learningProvider.PreviousEstablishmentNumber,
                 ManagementGroupType = learningProvider.ManagementGroup?.Type,
                 ManagementGroupId = learningProvider.ManagementGroup?.Identifier,
             };
