@@ -300,13 +300,14 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
 
                         conditionValue = dtm.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
                     }
-                    else if (filterOperator == Operators.IsNull || filterOperator == Operators.IsNotNull)
-                    {
-                        conditionValue = "null";
-                    }
                     else
                     {
                         conditionValue = $"'{value}'";
+                    }
+
+                    if (filterOperator == Operators.IsNull || filterOperator == Operators.IsNotNull)
+                    {
+                        conditionValue = "null";
                     }
 
                     var acsOperator = OperatorMappings[filterOperator.ToLower()];
