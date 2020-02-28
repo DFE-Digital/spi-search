@@ -115,21 +115,43 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         }
         private string[] GetValidOperatorsForField(string field)
         {
-            switch (field.ToLower())
+            string[] toReturn = null;
+
+            const string NameField = "name";
+
+            string fieldLower = field.ToLower();
+
+            switch (fieldLower)
             {
-                case "name":
-                    return NonFilterableOperators;
+                case NameField:
+                    toReturn = NonFilterableOperators;
+                    break;
+
                 case "type":
                 case "subtype":
                 case "status":
                 case "managementgrouptype":
-                    return EnumOperators;
+                    toReturn = EnumOperators;
+                    break;
+
                 case "opendate":
                 case "closedate":
-                    return DateOperators;
+                    toReturn = DateOperators;
+                    break;
+
                 default:
-                    return StringOperators;
+                    toReturn = StringOperators;
+                    break;
             }
+
+            // NOTE: *If* we introduce another SEARCHABLE type, ensure that you
+            //       *exclude* the field from having null-checking.
+            if (fieldLower != NameField)
+            {
+                toReturn = toReturn.Concat(NullCheckingOperators).ToArray();
+            }
+
+            return toReturn;
         }
 
         private LearningProviderSearchDocument MapLearningProviderToSearchDocument(LearningProvider learningProvider,
@@ -191,6 +213,11 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         private static readonly string[] StringOperators = new[]
         {
             Operators.Equals, 
+        };
+        private static readonly string[] NullCheckingOperators = new[]
+        {
+            Operators.IsNull,
+            Operators.IsNotNull,
         };
     }
 }
