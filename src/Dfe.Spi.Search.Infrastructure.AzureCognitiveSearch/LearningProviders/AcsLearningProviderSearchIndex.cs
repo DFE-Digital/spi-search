@@ -16,7 +16,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
     public class AcsLearningProviderSearchIndex : ILearningProviderSearchIndex
     {
         private static readonly SearchFieldDefinition[] FieldDefinitions;
-        
+
         private readonly SearchIndexConfiguration _configuration;
         private readonly ILoggerWrapper _logger;
 
@@ -24,7 +24,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
         {
             var properties = typeof(AcsLearningProviderDocument).GetProperties();
             var definitions = new List<SearchFieldDefinition>();
-            
+
             foreach (var property in properties)
             {
                 definitions.Add(new SearchFieldDefinition
@@ -108,7 +108,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
             {
                 var search = BuildSearch(request);
                 _logger.Info($"Search ACS with query {search.Query} and filter {search.Filter}...");
-                
+
                 var results = await client.Documents.SearchAsync<AcsLearningProviderDocument>(
                     search.Query,
                     new SearchParameters
@@ -117,6 +117,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                         Filter = search.Filter,
                     },
                     cancellationToken: cancellationToken);
+
                 var documents = results.Results.Select(acs => new LearningProviderSearchDocument
                 {
                     Name = acs.Document.Name,
@@ -139,6 +140,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                     SourceSystemName = acs.Document.SourceSystemName,
                     SourceSystemId = acs.Document.SourceSystemId,
                 }).ToArray();
+
                 return new SearchResultset<LearningProviderSearchDocument>
                 {
                     Documents = documents,
@@ -147,28 +149,34 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
         }
 
 
-
         private AcsSearch BuildSearch(SearchRequest request)
         {
-            var search = new AcsSearch();
+            var search = new AcsSearch(request.CombinationOperator);
 
-            foreach (var requestFilter in request.Filter)
+            foreach (var searchGroup in request.Groups)
             {
-                var definition = FieldDefinitions.Single(fd =>
-                    fd.Name.Equals(requestFilter.Field, StringComparison.InvariantCultureIgnoreCase));
+                var group = new AcsSearch(searchGroup.CombinationOperator);
 
-                if (definition.IsSearchable)
+                foreach (var requestFilter in searchGroup.Filter)
                 {
-                    search.AppendQuery(definition, requestFilter.Value);
+                    var definition = FieldDefinitions.Single(fd =>
+                        fd.Name.Equals(requestFilter.Field, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (definition.IsSearchable)
+                    {
+                        group.AppendQuery(definition, requestFilter.Value);
+                    }
+                    else if (definition.IsFilterable)
+                    {
+                        group.AppendFilter(definition, requestFilter.Operator, requestFilter.Value);
+                    }
+                    else
+                    {
+                        throw new Exception($"{requestFilter.Field} is neither searchable nor filterable");
+                    }
                 }
-                else if (definition.IsFilterable)
-                {
-                    search.AppendFilter(definition, requestFilter.Operator, requestFilter.Value);
-                }
-                else
-                {
-                    throw new Exception($"{requestFilter.Field} is neither searchable nor filterable");
-                }
+
+                search.AddGroup(group);
             }
 
             if (string.IsNullOrEmpty(search.Query))
@@ -207,9 +215,16 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
 
     internal class AcsSearch
     {
+        public AcsSearch(string combinationOperator)
+        {
+            CombinationOperator = combinationOperator;
+        }
+
+        public string CombinationOperator { get; }
         public string Query { get; set; } = "";
         public string Filter { get; set; }
 
+        
         public void AppendQuery(SearchFieldDefinition field, string value)
         {
             if (IsNumericType(field.DataType))
@@ -221,11 +236,12 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                 AppendQuery($"{field.Name}: \"{value}\"");
             }
         }
+
         public void AppendQuery(string value)
         {
             if (Query?.Length > 0)
             {
-                Query += $" and {value}";
+                Query += $" {CombinationOperator} {value}";
             }
             else
             {
@@ -266,21 +282,37 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                 {
                     conditionValue = $"'{value}'";
                 }
+
                 var acsOperator = OperatorMappings[filterOperator.ToLower()];
                 AppendFilter($"{field.Name} {acsOperator} {conditionValue}");
             }
         }
+
         public void AppendFilter(string value)
         {
             if (Filter?.Length > 0)
             {
-                Filter += $" and {value}";
+                Filter += $" {CombinationOperator} {value}";
             }
             else
             {
                 Filter = value;
             }
         }
+
+        public void AddGroup(AcsSearch group)
+        {
+            if (!string.IsNullOrEmpty(group.Query) && group.Query != "*")
+            {
+                AppendQuery($"({group.Query})");
+            }
+            if (!string.IsNullOrEmpty(group.Filter))
+            {
+                AppendFilter($"({group.Filter})");
+            }
+        }
+        
+        
 
         private bool IsNumericType(Type type)
         {

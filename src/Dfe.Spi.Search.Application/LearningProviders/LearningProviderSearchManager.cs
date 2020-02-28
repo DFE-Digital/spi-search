@@ -38,7 +38,6 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         public async Task<SearchResultset<LearningProviderSearchDocument>> SearchAsync(SearchRequest request,
             CancellationToken cancellationToken)
         {
-
             await EnsureSearchRequestIsValid(request, cancellationToken);
 
             return await _searchIndex.SearchAsync(request, cancellationToken);
@@ -74,26 +73,46 @@ namespace Dfe.Spi.Search.Application.LearningProviders
                 throw new InvalidRequestException("Must provide SearchRequest");
             }
 
-            if (request.Filter == null)
+            if (request.Groups == null)
             {
-                throw new InvalidRequestException("Must provide filters");
+                throw new InvalidRequestException("Must provide groups");
             }
+
+            if (request.CombinationOperator != "and" && request.CombinationOperator != "or")
+            {
+                throw new InvalidRequestException("Request combinationOperator must be either 'and' or 'or'");
+            }
+
 
             var validationProblems = new List<string>();
             var searchableFields = await _searchIndex.GetSearchableFieldsAsync(cancellationToken);
-            foreach (var filter in request.Filter)
+            for (var i = 0; i < request.Groups.Length; i++)
             {
-                filter.Operator = filter.Operator ?? GetDefaultOperatorForField(filter.Field);
-                
-                if (!searchableFields.Any(f => f.Equals(filter.Field, StringComparison.InvariantCultureIgnoreCase)))
+                if (request.Groups[i].CombinationOperator != "and" && request.Groups[i].CombinationOperator != "or")
                 {
-                    validationProblems.Add($"{filter.Field} is not a valid field for filtering");
+                    validationProblems.Add($"Group {i} combinationOperator must be either 'and' or 'or'");
                 }
-
-                var validOperators = GetValidOperatorsForField(filter.Field);
-                if (!validOperators.Any(o => o.Equals(filter.Operator, StringComparison.InvariantCultureIgnoreCase)))
+                if (request.Groups[i].Filter == null)
                 {
-                    validationProblems.Add($"Operator {filter.Operator} is not valid for {filter.Field}");
+                    validationProblems.Add($"Group {i} must have filters");
+                    continue;
+                }
+                
+                foreach (var filter in request.Groups[i].Filter)
+                {
+                    filter.Operator = filter.Operator ?? GetDefaultOperatorForField(filter.Field);
+
+                    if (!searchableFields.Any(f => f.Equals(filter.Field, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        validationProblems.Add($"{filter.Field} in group {i} is not a valid field for filtering");
+                    }
+
+                    var validOperators = GetValidOperatorsForField(filter.Field);
+                    if (!validOperators.Any(o =>
+                        o.Equals(filter.Operator, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        validationProblems.Add($"Operator {filter.Operator} is not valid for {filter.Field} in group {i}");
+                    }
                 }
             }
 
@@ -113,6 +132,7 @@ namespace Dfe.Spi.Search.Application.LearningProviders
                     return Operators.Equals;
             }
         }
+
         private string[] GetValidOperatorsForField(string field)
         {
             string[] toReturn = null;
@@ -142,13 +162,6 @@ namespace Dfe.Spi.Search.Application.LearningProviders
                 default:
                     toReturn = StringOperators;
                     break;
-            }
-
-            // NOTE: *If* we introduce another SEARCHABLE type, ensure that you
-            //       *exclude* the field from having null-checking.
-            if (fieldLower != NameField)
-            {
-                toReturn = toReturn.Concat(NullCheckingOperators).ToArray();
             }
 
             return toReturn;
@@ -192,30 +205,33 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         }
 
 
-
         private static readonly string[] NonFilterableOperators = new[]
         {
             Operators.Contains,
         };
+
         private static readonly string[] EnumOperators = new[]
         {
-            Operators.Equals, 
+            Operators.Equals,
             Operators.In,
+            Operators.IsNull,
+            Operators.IsNotNull,
         };
+
         private static readonly string[] DateOperators = new[]
         {
-            Operators.Equals, 
+            Operators.Equals,
             Operators.GreaterThan,
             Operators.GreaterThanOrEqualTo,
             Operators.LessThan,
             Operators.LessThanOrEqualTo,
+            Operators.IsNull,
+            Operators.IsNotNull,
         };
+
         private static readonly string[] StringOperators = new[]
         {
-            Operators.Equals, 
-        };
-        private static readonly string[] NullCheckingOperators = new[]
-        {
+            Operators.Equals,
             Operators.IsNull,
             Operators.IsNotNull,
         };

@@ -94,20 +94,26 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
 
         private bool AreEqual(SearchRequest expected, SearchRequest actual)
         {
-            if (expected?.Filter?.Length != actual?.Filter?.Length)
+            if (expected?.Groups?.Length != actual?.Groups?.Length)
             {
                 return false;
             }
 
-            for (var i = 0; i < expected.Filter.Length; i++)
+            for (var g = 0; g < expected.Groups.Length; g++)
             {
-                var expectedFilter = expected.Filter[i];
-                var actualFilter = actual.Filter[i];
+                var expectedGroup = expected.Groups[g];
+                var actualGroup = actual.Groups[g];
 
-                if (expectedFilter.Field != actualFilter.Field
-                    || expectedFilter.Value != actualFilter.Value)
+                for (var f = 0; f < expectedGroup.Filter.Length; f++)
                 {
-                    return false;
+                    var expectedFilter = expectedGroup.Filter[f];
+                    var actualFilter = actualGroup.Filter[f];
+
+                    if (expectedFilter.Field != actualFilter.Field
+                        || expectedFilter.Value != actualFilter.Value)
+                    {
+                        return false;
+                    }
                 }
             }
             
