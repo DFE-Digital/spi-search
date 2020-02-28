@@ -184,6 +184,7 @@ namespace Dfe.Spi.Search.Application.LearningProviders
                 CharitiesCommissionNumber = learningProvider.CharitiesCommissionNumber,
                 AcademyTrustCode = learningProvider.AcademyTrustCode,
                 DfeNumber = learningProvider.DfeNumber,
+                LocalAuthorityCode = learningProvider.LocalAuthorityCode,
                 EstablishmentNumber = learningProvider.EstablishmentNumber,
                 PreviousEstablishmentNumber = learningProvider.PreviousEstablishmentNumber,
                 ManagementGroupType = learningProvider.ManagementGroup?.Type,

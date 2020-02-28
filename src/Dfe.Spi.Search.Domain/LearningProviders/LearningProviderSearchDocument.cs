@@ -18,6 +18,7 @@ namespace Dfe.Spi.Search.Domain.LearningProviders
         public virtual string CharitiesCommissionNumber { get; set; }
         public virtual string AcademyTrustCode { get; set; }
         public virtual string DfeNumber { get; set; }
+        public virtual string LocalAuthorityCode { get; set; }
         public virtual long? EstablishmentNumber { get; set; }
         public virtual long? PreviousEstablishmentNumber { get; set; }
         public virtual string ManagementGroupType { get; set; }
