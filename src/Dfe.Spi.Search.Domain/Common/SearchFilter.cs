@@ -18,5 +18,6 @@ namespace Dfe.Spi.Search.Domain.Common
         public const string In = "in";
         public const string IsNull = "isnull";
         public const string IsNotNull = "isnotnull";
+        public const string Between = "between";
     }
 }

@@ -137,13 +137,11 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         {
             string[] toReturn = null;
 
-            const string NameField = "name";
-
             string fieldLower = field.ToLower();
 
             switch (fieldLower)
             {
-                case NameField:
+                case "name":
                     toReturn = NonFilterableOperators;
                     break;
 
@@ -227,6 +225,7 @@ namespace Dfe.Spi.Search.Application.LearningProviders
             Operators.LessThanOrEqualTo,
             Operators.IsNull,
             Operators.IsNotNull,
+            Operators.Between,
         };
 
         private static readonly string[] StringOperators = new[]

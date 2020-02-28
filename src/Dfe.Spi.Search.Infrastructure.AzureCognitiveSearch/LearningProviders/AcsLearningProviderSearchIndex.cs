@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -251,40 +251,70 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
 
         public void AppendFilter(SearchFieldDefinition field, string filterOperator, string value)
         {
-            if (filterOperator == Operators.In)
+            if (filterOperator == Operators.Between)
             {
-                var values = value.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
-                var conditionValue = values.Aggregate((x, y) => $"{x},{y}");
-                AppendFilter($"search.in({field.Name}, '{conditionValue}', ',')");
-            }
-            else
-            {
-                string conditionValue;
-                if (IsNumericType(field.DataType))
-                {
-                    conditionValue = value;
-                }
-                else if (IsDateType(field.DataType))
-                {
-                    DateTime dtm;
-                    if (!DateTime.TryParse(value, out dtm))
-                    {
-                        throw new Exception($"{value} is not a valid date/time value for {field.Name}");
-                    }
+                string[] dateParts = value.Split(
+                    new string[] { " to " },
+                    StringSplitOptions.RemoveEmptyEntries);
 
-                    conditionValue = dtm.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
-                }
-                else if (filterOperator == Operators.IsNull || filterOperator == Operators.IsNotNull)
+                if (dateParts.Length != 2)
                 {
-                    conditionValue = "null";
+                    // Then get upset 💢
+                    throw new FormatException(
+                        $"Between values need to contain 2 valid " +
+                        $"{nameof(DateTime)}s, seperated by the keyword " +
+                        $"\"to\". For example, \"2018-06-29T00:00:00Z\" to " +
+                        $"\"2018-07-01T00:00:00Z\".");
+                }
+
+                // Else...
+                // Try and build up a group query of our own.
+                AcsSearch between = new AcsSearch("and");
+                between.AppendFilter(field, Operators.LessThan, dateParts.Last());
+                between.AppendFilter(field, Operators.GreaterThan, dateParts.First());
+
+                AddGroup(between);
+            }
+            else {
+
+                if (filterOperator == Operators.In)
+                {
+                    var values = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
+                    var conditionValue = values.Aggregate((x, y) => $"{x},{y}");
+                    AppendFilter($"search.in({field.Name}, '{conditionValue}', ',')");
                 }
                 else
                 {
-                    conditionValue = $"'{value}'";
-                }
+                    string conditionValue;
+                    if (filterOperator == Operators.IsNull || filterOperator == Operators.IsNotNull)
+                    {
+                        conditionValue = "null";
+                    }
+                    else
+                    {
+                        if (IsNumericType(field.DataType))
+                        {
+                            conditionValue = value;
+                        }
+                        else if (IsDateType(field.DataType))
+                        {
+                            DateTime dtm;
+                            if (!DateTime.TryParse(value, out dtm))
+                            {
+                                throw new Exception($"{value} is not a valid date/time value for {field.Name}");
+                            }
 
-                var acsOperator = OperatorMappings[filterOperator.ToLower()];
-                AppendFilter($"{field.Name} {acsOperator} {conditionValue}");
+                            conditionValue = dtm.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+                        }
+                        else
+                        {
+                            conditionValue = $"'{value}'";
+                        }
+                    }
+
+                    var acsOperator = OperatorMappings[filterOperator.ToLower()];
+                    AppendFilter($"{field.Name} {acsOperator} {conditionValue}");
+                }
             }
         }
 
