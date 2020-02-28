@@ -36,10 +36,18 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
         {
             var request = new SearchRequest
             {
-                Filter = new[]
+                Groups = new []
                 {
-                    new SearchFilter {Field = "Name"},
+                    new SearchGroup
+                    {
+                        Filter = new[]
+                        {
+                            new SearchFilter {Field = "Name"},
+                        },
+                        CombinationOperator = "and"
+                    }, 
                 },
+                CombinationOperator = "and"
             };
 
             await _manager.SearchAsync(request, _cancellationToken);
@@ -55,17 +63,25 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
         {
             var request = new SearchRequest
             {
-                Filter = new[]
+                Groups = new []
                 {
-                    new SearchFilter {Field = field},
+                    new SearchGroup
+                    {
+                        Filter = new[]
+                        {
+                            new SearchFilter {Field = field},
+                        },
+                        CombinationOperator = "and"
+                    }, 
                 },
+                CombinationOperator = "and"
             };
 
             await _manager.SearchAsync(request, _cancellationToken);
 
             _searchIndexMock.Verify(i => i.SearchAsync(
                     It.Is<SearchRequest>(r=>
-                        r.Filter[0].Operator == defaultOperator), 
+                        r.Groups[0].Filter[0].Operator == defaultOperator), 
                     _cancellationToken),
                 Times.Once);
         }
@@ -79,16 +95,87 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
         }
 
         [Test]
-        public void ThenItShouldThrowInvalidRequestExceptionIfSearchRequestHasNoFilters()
+        public void ThenItShouldThrowInvalidRequestExceptionIfSearchRequestHasNoGroups()
         {
             var request = new SearchRequest
             {
-                Filter = null,
+                Groups = null,
             };
 
             var actual = Assert.ThrowsAsync<InvalidRequestException>(async () =>
                 await _manager.SearchAsync(request, _cancellationToken));
-            AssertInvalidRequestHasReason(actual, "Must provide filters");
+            AssertInvalidRequestHasReason(actual, "Must provide groups");
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("both")]
+        public void ThenItShouldThrowInvalidRequestExceptionIfSearchRequestHasMissingOrInvalidCombinationOperator(string requestCombinationOperator)
+        {
+            var request = new SearchRequest
+            {
+                Groups = new []
+                {
+                    new SearchGroup
+                    {
+                        Filter = null,
+                        CombinationOperator = "and",
+                    }, 
+                },
+                CombinationOperator = requestCombinationOperator,
+            };
+
+            var actual = Assert.ThrowsAsync<InvalidRequestException>(async () =>
+                await _manager.SearchAsync(request, _cancellationToken));
+            AssertInvalidRequestHasReason(actual, "Request combinationOperator must be either 'and' or 'or'");
+        }
+
+        [Test]
+        public void ThenItShouldThrowInvalidRequestExceptionIfSearchGroupHasNoFilters()
+        {
+            var request = new SearchRequest
+            {
+                Groups = new []
+                {
+                    new SearchGroup
+                    {
+                        Filter = null,
+                        CombinationOperator = "and",
+                    }, 
+                },
+                CombinationOperator = "and",
+            };
+
+            var actual = Assert.ThrowsAsync<InvalidRequestException>(async () =>
+                await _manager.SearchAsync(request, _cancellationToken));
+            AssertInvalidRequestHasReason(actual, "Group 0 must have filters");
+            _searchIndexMock.Verify(i => i.GetSearchableFieldsAsync(_cancellationToken),
+                Times.Once);
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("both")]
+        public void ThenItShouldThrowInvalidRequestExceptionIfSearchGroupHasMissingOrInvalidCombinationOperator(string groupCombinationOperator)
+        {
+            var request = new SearchRequest
+            {
+                Groups = new []
+                {
+                    new SearchGroup
+                    {
+                        Filter = null,
+                        CombinationOperator = groupCombinationOperator,
+                    }, 
+                },
+                CombinationOperator = "and",
+            };
+
+            var actual = Assert.ThrowsAsync<InvalidRequestException>(async () =>
+                await _manager.SearchAsync(request, _cancellationToken));
+            AssertInvalidRequestHasReason(actual, "Group 0 combinationOperator must be either 'and' or 'or'");
+            _searchIndexMock.Verify(i => i.GetSearchableFieldsAsync(_cancellationToken),
+                Times.Once);
         }
 
         [Test]
@@ -96,18 +183,26 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
         {
             var request = new SearchRequest
             {
-                Filter = new[]
+                Groups = new []
                 {
-                    new SearchFilter {Field = "SomeField"},
-                    new SearchFilter {Field = "AnotherField"},
-                    new SearchFilter {Field = "Name"},
+                    new SearchGroup
+                    {
+                        Filter = new[]
+                        {
+                            new SearchFilter {Field = "SomeField"},
+                            new SearchFilter {Field = "AnotherField"},
+                            new SearchFilter {Field = "Name"},
+                        },
+                        CombinationOperator = "and",
+                    }, 
                 },
+                CombinationOperator = "and",
             };
 
             var actual = Assert.ThrowsAsync<InvalidRequestException>(async () =>
                 await _manager.SearchAsync(request, _cancellationToken));
-            AssertInvalidRequestHasReason(actual, "SomeField is not a valid field for filtering");
-            AssertInvalidRequestHasReason(actual, "AnotherField is not a valid field for filtering");
+            AssertInvalidRequestHasReason(actual, "SomeField in group 0 is not a valid field for filtering");
+            AssertInvalidRequestHasReason(actual, "AnotherField in group 0 is not a valid field for filtering");
             _searchIndexMock.Verify(i => i.GetSearchableFieldsAsync(_cancellationToken),
                 Times.Once);
         }
@@ -117,15 +212,23 @@ namespace Dfe.Spi.Search.Application.UnitTests.LearningProviders
         {
             var request = new SearchRequest
             {
-                Filter = new[]
+                Groups = new []
                 {
-                    new SearchFilter {Field = "Name", Operator = Operators.GreaterThan},
+                    new SearchGroup
+                    {
+                        Filter = new[]
+                        {
+                            new SearchFilter {Field = "Name", Operator = Operators.GreaterThan},
+                        },
+                        CombinationOperator = "and",
+                    }, 
                 },
+                CombinationOperator = "and",
             };
 
             var actual = Assert.ThrowsAsync<InvalidRequestException>(async () =>
                 await _manager.SearchAsync(request, _cancellationToken));
-            AssertInvalidRequestHasReason(actual, "Operator greaterthan is not valid for Name");
+            AssertInvalidRequestHasReason(actual, "Operator greaterthan is not valid for Name in group 0");
             _searchIndexMock.Verify(i => i.GetSearchableFieldsAsync(_cancellationToken),
                 Times.Once);
         }
