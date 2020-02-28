@@ -164,11 +164,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
                     var definition = FieldDefinitions.Single(fd =>
                         fd.Name.Equals(requestFilter.Field, StringComparison.InvariantCultureIgnoreCase));
 
-                    if (definition.IsSearchable)
-                    {
-                        group.AppendQuery(definition, requestFilter.Value);
-                    }
-                    else if (definition.IsFilterable)
+                    if (definition.IsSearchable || definition.IsFilterable)
                     {
                         group.AppendFilter(definition, requestFilter.Operator, requestFilter.Value);
                     }
@@ -253,6 +249,12 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
 
         public void AppendFilter(SearchFieldDefinition field, string filterOperator, string value)
         {
+            if (field.IsSearchable)
+            {
+                AppendFilter($"search.ismatch('\"{value}\"', '{field.Name}')");
+                return;
+            }
+            
             if (filterOperator == Operators.Between)
             {
                 string[] dateParts = value.Split(

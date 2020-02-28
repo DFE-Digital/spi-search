@@ -20,7 +20,7 @@
       "name": "Name",
       "type": "Edm.String",
       "facetable": false,
-      "filterable": false,
+      "filterable": true,
       "key": false,
       "retrievable": true,
       "searchable": true,
