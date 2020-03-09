@@ -17,10 +17,10 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.ManagementGroups
             {
                 Id = EncodeIdForAcs($"{model.SourceSystemName}-{model.SourceSystemId}"),
                 Name = model.Name,
-                Code = model.Name,
-                Type = model.Name,
-                Identifier = model.Name,
-                CompaniesHouseNumber = model.Name,
+                Code = model.Code,
+                Type = model.Type,
+                Identifier = model.Identifier,
+                CompaniesHouseNumber = model.CompaniesHouseNumber,
             };
         }
 
@@ -29,10 +29,10 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.ManagementGroups
             return new ManagementGroupSearchDocument
             {
                 Name = search.Name,
-                Code = search.Name,
-                Type = search.Name,
-                Identifier = search.Name,
-                CompaniesHouseNumber = search.Name,
+                Code = search.Code,
+                Type = search.Type,
+                Identifier = search.Identifier,
+                CompaniesHouseNumber = search.CompaniesHouseNumber,
             };
         }
     }
