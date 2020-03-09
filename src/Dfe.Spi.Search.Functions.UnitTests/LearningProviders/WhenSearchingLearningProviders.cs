@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
+using Dfe.Spi.Common.Http.Server.Definitions;
 using Dfe.Spi.Common.Logging.Definitions;
 using Dfe.Spi.Search.Application;
 using Dfe.Spi.Search.Application.LearningProviders;
@@ -22,6 +23,7 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
     {
         private Mock<ILearningProviderSearchManager> _searchManagerMock;
         private Mock<ILoggerWrapper> _loggerMock;
+        private Mock<IHttpSpiExecutionContextManager> _spiExecutionManagerMock;
         private DefaultHttpRequest _httpRequest;
         private CancellationToken _cancellationToken;
         private SearchLearningProviders _function;
@@ -37,8 +39,13 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
                 });
 
             _loggerMock = new Mock<ILoggerWrapper>();
+            
+            _spiExecutionManagerMock = new Mock<IHttpSpiExecutionContextManager>();
 
-            _function = new SearchLearningProviders(_searchManagerMock.Object, _loggerMock.Object);
+            _function = new SearchLearningProviders(
+                _searchManagerMock.Object, 
+                _loggerMock.Object,
+                _spiExecutionManagerMock.Object);
 
             _httpRequest = new DefaultHttpRequest(new DefaultHttpContext());
 
@@ -50,7 +57,7 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
         {
             await _function.Run(_httpRequest, _cancellationToken);
 
-            _loggerMock.Verify(l => l.SetContext(_httpRequest.Headers), 
+            _spiExecutionManagerMock.Verify(c => c.SetContext(_httpRequest.Headers), 
                 Times.Once);
         }
 

@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Dfe.Spi.Common.Http.Server.Definitions;
 using Dfe.Spi.Common.Logging.Definitions;
 using Dfe.Spi.Common.UnitTesting.Fixtures;
 using Dfe.Spi.Models.Entities;
@@ -20,6 +21,7 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
     {
         private Mock<ILearningProviderSearchManager> _searchManagerMock;
         private Mock<ILoggerWrapper> _loggerMock;
+        private Mock<IHttpSpiExecutionContextManager> _spiExecutionManagerMock;
         private SyncLearningProvider _function;
         private CancellationToken _cancellationToken;
 
@@ -29,10 +31,13 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
             _searchManagerMock = new Mock<ILearningProviderSearchManager>();
 
             _loggerMock = new Mock<ILoggerWrapper>();
+            
+            _spiExecutionManagerMock = new Mock<IHttpSpiExecutionContextManager>();
 
             _function = new SyncLearningProvider(
                 _searchManagerMock.Object,
-                _loggerMock.Object);
+                _loggerMock.Object,
+                _spiExecutionManagerMock.Object);
 
             _cancellationToken = new CancellationToken();
         }

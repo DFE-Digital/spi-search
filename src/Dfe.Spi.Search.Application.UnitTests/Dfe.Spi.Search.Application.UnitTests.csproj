@@ -9,8 +9,8 @@
     <ItemGroup>
         <PackageReference Include="AutoFixture" Version="4.11.0" />
         <PackageReference Include="AutoFixture.NUnit3" Version="4.11.0" />
-        <PackageReference Include="Dfe.Spi.Common.Logging" Version="1.0.9" />
-        <PackageReference Include="Dfe.Spi.Common.UnitTesting" Version="1.0.6" />
+        <PackageReference Include="Dfe.Spi.Common.Logging" Version="1.1.1" />
+        <PackageReference Include="Dfe.Spi.Common.UnitTesting" Version="1.0.7" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.0" />
         <PackageReference Include="Moq" Version="4.13.1" />
         <PackageReference Include="nunit" Version="3.11.0" />
