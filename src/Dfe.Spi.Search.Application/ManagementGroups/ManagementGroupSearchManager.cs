@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,8 +13,8 @@ namespace Dfe.Spi.Search.Application.ManagementGroups
 {
     public interface IManagementGroupSearchManager
     {
-        // Task<SearchResultset<ManagementGroupSearchDocument>> SearchAsync(SearchRequest request,
-        //     CancellationToken cancellationToken);
+        Task<SearchResultset<ManagementGroupSearchDocument>> SearchAsync(SearchRequest request,
+            CancellationToken cancellationToken);
 
         Task SyncAsync(ManagementGroup managementGroup, string source, CancellationToken cancellationToken);
 
@@ -30,6 +32,14 @@ namespace Dfe.Spi.Search.Application.ManagementGroups
         {
             _searchIndex = searchIndex;
             _logger = logger;
+        }
+
+        public async Task<SearchResultset<ManagementGroupSearchDocument>> SearchAsync(SearchRequest request,
+            CancellationToken cancellationToken)
+        {
+            await EnsureSearchRequestIsValid(request, cancellationToken);
+
+            return await _searchIndex.SearchAsync(request, cancellationToken);
         }
         
         public async Task SyncAsync(ManagementGroup managementGroup, string source, CancellationToken cancellationToken)
@@ -52,6 +62,94 @@ namespace Dfe.Spi.Search.Application.ManagementGroups
             _logger.Debug($"Successfully uploaded document to search index");
         }
 
+
+
+        private async Task EnsureSearchRequestIsValid(SearchRequest request, CancellationToken cancellationToken)
+        {
+            if (request == null)
+            {
+                throw new InvalidRequestException("Must provide SearchRequest");
+            }
+
+            if (request.Groups == null)
+            {
+                throw new InvalidRequestException("Must provide groups");
+            }
+
+            if (request.CombinationOperator != "and" && request.CombinationOperator != "or")
+            {
+                throw new InvalidRequestException("Request combinationOperator must be either 'and' or 'or'");
+            }
+
+
+            var validationProblems = new List<string>();
+            var searchableFields = await _searchIndex.GetSearchableFieldsAsync(cancellationToken);
+            for (var i = 0; i < request.Groups.Length; i++)
+            {
+                if (request.Groups[i].CombinationOperator != "and" && request.Groups[i].CombinationOperator != "or")
+                {
+                    validationProblems.Add($"Group {i} combinationOperator must be either 'and' or 'or'");
+                }
+                if (request.Groups[i].Filter == null)
+                {
+                    validationProblems.Add($"Group {i} must have filters");
+                    continue;
+                }
+                
+                foreach (var filter in request.Groups[i].Filter)
+                {
+                    filter.Operator = filter.Operator ?? GetDefaultOperatorForField(filter.Field);
+
+                    if (!searchableFields.Any(f => f.Equals(filter.Field, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        validationProblems.Add($"{filter.Field} in group {i} is not a valid field for filtering");
+                    }
+
+                    var validOperators = GetValidOperatorsForField(filter.Field);
+                    if (!validOperators.Any(o =>
+                        o.Equals(filter.Operator, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        validationProblems.Add($"Operator {filter.Operator} is not valid for {filter.Field} in group {i}");
+                    }
+                }
+            }
+
+            if (validationProblems.Count > 0)
+            {
+                throw new InvalidRequestException(validationProblems.ToArray());
+            }
+        }
+
+        private string GetDefaultOperatorForField(string field)
+        {
+            switch (field.ToLower())
+            {
+                case "name":
+                    return Operators.Contains;
+                default:
+                    return Operators.Equals;
+            }
+        }
+
+        private string[] GetValidOperatorsForField(string field)
+        {
+            string[] toReturn = null;
+
+            string fieldLower = field.ToLower();
+
+            switch (fieldLower)
+            {
+                case "name":
+                    toReturn = NonFilterableOperators;
+                    break;
+                
+                default:
+                    toReturn = StringOperators;
+                    break;
+            }
+
+            return toReturn;
+        }
         private ManagementGroupSearchDocument MapManagementGroupToSearchDocument(ManagementGroup managementGroup, string source)
         {
             return new ManagementGroupSearchDocument
@@ -65,5 +163,18 @@ namespace Dfe.Spi.Search.Application.ManagementGroups
                 SourceSystemId = managementGroup.Code,
             };
         }
+        
+        
+        private static readonly string[] NonFilterableOperators = new[]
+        {
+            Operators.Contains,
+        };
+
+        private static readonly string[] StringOperators = new[]
+        {
+            Operators.Equals,
+            Operators.IsNull,
+            Operators.IsNotNull,
+        };
     }
 }
