@@ -1,10 +1,14 @@
 using System.IO;
+using Dfe.Spi.Common.Context.Definitions;
+using Dfe.Spi.Common.Http.Server;
+using Dfe.Spi.Common.Http.Server.Definitions;
 using Dfe.Spi.Common.Logging;
 using Dfe.Spi.Common.Logging.Definitions;
 using Dfe.Spi.Search.Application.LearningProviders;
 using Dfe.Spi.Search.Domain.Configuration;
 using Dfe.Spi.Search.Domain.LearningProviders;
 using Dfe.Spi.Search.Functions;
+using Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch;
 using Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Azure.WebJobs.Logging;
@@ -48,9 +52,13 @@ namespace Dfe.Spi.Search.Functions
         private void AddLogging(IServiceCollection services)
         {
             services.AddLogging();
-            services.AddScoped(typeof(ILogger<>), typeof(Logger<>));
             services.AddScoped<ILogger>(provider =>
                 provider.GetService<ILoggerFactory>().CreateLogger(LogCategories.CreateFunctionUserCategory("Common")));
+            services.AddScoped<ILoggerWrapper, LoggerWrapper>();
+            
+            services.AddScoped<IHttpSpiExecutionContextManager, HttpSpiExecutionContextManager>();
+            services.AddScoped<ISpiExecutionContextManager>((provider) =>
+                (ISpiExecutionContextManager) provider.GetService(typeof(IHttpSpiExecutionContextManager)));
             services.AddScoped<ILoggerWrapper, LoggerWrapper>();
         }
 
