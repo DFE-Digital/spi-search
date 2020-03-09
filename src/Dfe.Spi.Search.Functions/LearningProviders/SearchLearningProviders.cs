@@ -33,7 +33,7 @@ namespace Dfe.Spi.Search.Functions.LearningProviders
         }
 
         [FunctionName(FunctionName)]
-        public async Task<IActionResult> Run(
+        public async Task<IActionResult> RunAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "learning-providers")]
             HttpRequest req,
             CancellationToken cancellationToken)

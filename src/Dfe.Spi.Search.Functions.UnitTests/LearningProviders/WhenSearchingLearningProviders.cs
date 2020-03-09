@@ -55,7 +55,7 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
         [Test]
         public async Task ThenItShouldSetLoggerContext()
         {
-            await _function.Run(_httpRequest, _cancellationToken);
+            await _function.RunAsync(_httpRequest, _cancellationToken);
 
             _spiExecutionManagerMock.Verify(c => c.SetContext(_httpRequest.Headers), 
                 Times.Once);
@@ -67,7 +67,7 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
         {
             _httpRequest.Body = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(request)));
 
-            await _function.Run(_httpRequest, _cancellationToken);
+            await _function.RunAsync(_httpRequest, _cancellationToken);
             
             _searchManagerMock.Verify(m=>m.SearchAsync(It.Is<SearchRequest>(actual => AreEqual(request, actual)), _cancellationToken), 
                 Times.Once);
@@ -79,7 +79,7 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
             _searchManagerMock.Setup(m => m.SearchAsync(It.IsAny<SearchRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(searchResultset);
 
-            var actual = await _function.Run(_httpRequest, _cancellationToken);
+            var actual = await _function.RunAsync(_httpRequest, _cancellationToken);
             
             Assert.IsNotNull(actual);
             Assert.IsInstanceOf<OkObjectResult>(actual);
@@ -92,7 +92,7 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
             _searchManagerMock.Setup(m => m.SearchAsync(It.IsAny<SearchRequest>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidRequestException("Unit test reason 1", "Unit test reason 2"));
 
-            var actual = await _function.Run(_httpRequest, _cancellationToken);
+            var actual = await _function.RunAsync(_httpRequest, _cancellationToken);
             
             
             Assert.IsNotNull(actual);
