@@ -7,6 +7,7 @@ using CommandLine;
 using Dfe.Spi.Models.Entities;
 using Dfe.Spi.Search.Application.LearningProviders;
 using Dfe.Spi.Search.Domain.Configuration;
+using Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch;
 using Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders;
 using Newtonsoft.Json;
 
