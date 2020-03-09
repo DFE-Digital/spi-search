@@ -15,7 +15,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.ManagementGroups
         {
             return new AcsManagementGroupSearchDocument
             {
-                Id = $"{model.SourceSystemName}-{model.SourceSystemId}",
+                Id = EncodeIdForAcs($"{model.SourceSystemName}-{model.SourceSystemId}"),
                 Name = model.Name,
                 Code = model.Name,
                 Type = model.Name,

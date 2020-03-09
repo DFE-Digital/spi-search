@@ -5,6 +5,7 @@ using Dfe.Spi.Common.Http.Server.Definitions;
 using Dfe.Spi.Common.Logging;
 using Dfe.Spi.Common.Logging.Definitions;
 using Dfe.Spi.Search.Application.LearningProviders;
+using Dfe.Spi.Search.Application.ManagementGroups;
 using Dfe.Spi.Search.Domain.Configuration;
 using Dfe.Spi.Search.Domain.LearningProviders;
 using Dfe.Spi.Search.Domain.ManagementGroups;
@@ -73,7 +74,7 @@ namespace Dfe.Spi.Search.Functions
         private void AddManagementGroups(IServiceCollection services)
         {
             services.AddScoped<IManagementGroupSearchIndex, AcsManagementGroupSearchIndex>();
-            // services.AddScoped<ILearningProviderSearchManager, LearningProviderSearchManager>();
+            services.AddScoped<IManagementGroupSearchManager, ManagementGroupSearchManager>();
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dfe.Spi.Common.Logging.Definitions;
@@ -128,6 +129,28 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch
             }
 
             return search;
+        }
+
+        protected virtual string EncodeIdForAcs(string id)
+        {
+            var encodedId = new StringBuilder();
+            
+            foreach (var character in id)
+            {
+                if (char.IsLetterOrDigit(character) ||
+                    character == '-' ||
+                    character == '_' ||
+                    character == '=')
+                {
+                    encodedId.Append(character);
+                }
+                else
+                {
+                    encodedId.Append('_');
+                }
+            }
+
+            return encodedId.ToString();
         }
     }
 }
