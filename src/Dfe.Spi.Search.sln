@@ -36,6 +36,8 @@ EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedIndexWithLearningProviders", "SeedIndexWithLearningProviders\SeedIndexWithLearningProviders.csproj", "{CEB33E3A-A881-4590-AAB9-E73EE758A49A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedIndexWithManagementGroups", "SeedIndexWithManagementGroups\SeedIndexWithManagementGroups.csproj", "{BF57B677-BC9A-4272-A934-4D02AA72609A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{CEB33E3A-A881-4590-AAB9-E73EE758A49A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEB33E3A-A881-4590-AAB9-E73EE758A49A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEB33E3A-A881-4590-AAB9-E73EE758A49A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF57B677-BC9A-4272-A934-4D02AA72609A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF57B677-BC9A-4272-A934-4D02AA72609A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF57B677-BC9A-4272-A934-4D02AA72609A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF57B677-BC9A-4272-A934-4D02AA72609A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B579D114-FB41-40BD-BF2C-AD9B75DEF809} = {129A2C58-3E8B-4547-B6B2-F826048F7C03}
@@ -82,5 +88,6 @@ Global
 		{E9CDBECB-37E3-489C-ABE4-6E82CDC6F6E0} = {4470EF8B-EDF3-4137-8425-70DFD2266FA1}
 		{1AE7F121-CCBD-4E59-B070-011AC16F8CCA} = {4470EF8B-EDF3-4137-8425-70DFD2266FA1}
 		{CEB33E3A-A881-4590-AAB9-E73EE758A49A} = {129A2C58-3E8B-4547-B6B2-F826048F7C03}
+		{BF57B677-BC9A-4272-A934-4D02AA72609A} = {129A2C58-3E8B-4547-B6B2-F826048F7C03}
 	EndGlobalSection
 EndGlobal
