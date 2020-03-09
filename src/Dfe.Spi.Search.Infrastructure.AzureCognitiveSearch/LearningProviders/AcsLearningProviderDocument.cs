@@ -10,7 +10,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
         public string Id { get; set; }
         
         
-        [IsSearchable, IsSortable]
+        [IsSearchable, IsFilterable, IsSortable]
         public override string Name { get; set; }
         
         
