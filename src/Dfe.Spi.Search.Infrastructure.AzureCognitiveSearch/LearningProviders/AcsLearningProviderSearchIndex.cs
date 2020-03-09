@@ -60,7 +60,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
             {
                 var definition = new Index()
                 {
-                    Name = _configuration.IndexName,
+                    Name = _configuration.LearningProviderIndexName,
                     Fields = FieldBuilder.BuildForType<AcsLearningProviderDocument>()
                 };
 
@@ -189,7 +189,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders
 
         private SearchIndexClient GetIndexClient()
         {
-            return new SearchIndexClient(_configuration.AzureCognitiveSearchServiceName, _configuration.IndexName,
+            return new SearchIndexClient(_configuration.AzureCognitiveSearchServiceName, _configuration.LearningProviderIndexName,
                 new SearchCredentials(_configuration.AzureCognitiveSearchKey));
         }
     }

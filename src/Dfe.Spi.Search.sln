@@ -31,6 +31,7 @@ ProjectSection(SolutionItems) = preProject
 	..\azure\CreateSearchIndex.ps1 = ..\azure\CreateSearchIndex.ps1
 	..\azure\spi-learning-providers.schema.json = ..\azure\spi-learning-providers.schema.json
 	..\eventing\SubscribeToEvent.ps1 = ..\eventing\SubscribeToEvent.ps1
+	..\azure\spi-management-groups.schema.json = ..\azure\spi-management-groups.schema.json
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedIndexWithLearningProviders", "SeedIndexWithLearningProviders\SeedIndexWithLearningProviders.csproj", "{CEB33E3A-A881-4590-AAB9-E73EE758A49A}"

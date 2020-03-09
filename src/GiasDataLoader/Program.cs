@@ -20,7 +20,7 @@ namespace GiasDataLoader
             {
                 AzureCognitiveSearchServiceName = options.SearchServiceName,
                 AzureCognitiveSearchKey = options.SearchServiceKey,
-                IndexName = options.IndexName,
+                LearningProviderIndexName = options.IndexName,
             };
 
             await ProcessEstablishmentsFile(options, searchIndexConfig, cancellationToken);

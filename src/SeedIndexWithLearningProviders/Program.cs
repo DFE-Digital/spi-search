@@ -32,7 +32,7 @@ namespace SeedIndexWithLearningProviders
                 {
                     AzureCognitiveSearchServiceName = options.AcsServiceName,
                     AzureCognitiveSearchKey = options.AcsKey,
-                    IndexName = options.IndexName,
+                    LearningProviderIndexName = options.IndexName,
                 },
                 _logger);
             _searchManager = new LearningProviderSearchManager(searchIndex, _logger);
