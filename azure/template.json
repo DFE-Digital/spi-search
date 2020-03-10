@@ -170,8 +170,12 @@
               "value": "[listAdminKeys(variables('searchServiceId'), '2015-08-19').PrimaryKey]"
             },
             {
-              "name": "SPI_SearchIndex__IndexName",
+              "name": "SPI_SearchIndex__LearningProviderIndexName",
               "value": "spi-learning-providers"
+            },
+            {
+              "name": "SPI_SearchIndex__ManagementGroupIndexName",
+              "value": "spi-management-groups"
             }
           ],
           "ipSecurityRestrictions": [

@@ -1,29 +1,32 @@
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Dfe.Spi.Common.Http.Server.Definitions;
 using Dfe.Spi.Common.Logging.Definitions;
 using Dfe.Spi.Search.Application;
-using Dfe.Spi.Search.Application.LearningProviders;
+using Dfe.Spi.Search.Application.ManagementGroups;
 using Dfe.Spi.Search.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Dfe.Spi.Search.Functions.LearningProviders
+namespace Dfe.Spi.Search.Functions.ManagementGroups
 {
-    public class SearchLearningProviders
+    public class SearchManagementGroups
     {
-        private const string FunctionName = nameof(SearchLearningProviders);
+        private const string FunctionName = nameof(SearchManagementGroups);
 
-        private readonly ILearningProviderSearchManager _searchManager;
+        private readonly IManagementGroupSearchManager _searchManager;
         private readonly ILoggerWrapper _logger;
         private readonly IHttpSpiExecutionContextManager _spiExecutionContextManager;
 
-        public SearchLearningProviders(
-            ILearningProviderSearchManager searchManager, 
+        public SearchManagementGroups(
+            IManagementGroupSearchManager searchManager, 
             ILoggerWrapper logger,
             IHttpSpiExecutionContextManager spiExecutionContextManager)
         {
@@ -31,15 +34,15 @@ namespace Dfe.Spi.Search.Functions.LearningProviders
             _logger = logger;
             _spiExecutionContextManager = spiExecutionContextManager;
         }
-
+        
         [FunctionName(FunctionName)]
         public async Task<IActionResult> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "learning-providers")]
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "management-groups")]
             HttpRequest req,
             CancellationToken cancellationToken)
         {
             _spiExecutionContextManager.SetContext(req.Headers);
-            _logger.Info($"Start processing search for learning providers...");
+            _logger.Info($"Start processing search for management groups...");
 
             SearchRequest searchRequest;
             using (var reader = new StreamReader(req.Body))

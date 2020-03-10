@@ -6,10 +6,10 @@ using AutoFixture.NUnit3;
 using Dfe.Spi.Common.Http.Server.Definitions;
 using Dfe.Spi.Common.Logging.Definitions;
 using Dfe.Spi.Search.Application;
-using Dfe.Spi.Search.Application.LearningProviders;
+using Dfe.Spi.Search.Application.ManagementGroups;
 using Dfe.Spi.Search.Domain.Common;
-using Dfe.Spi.Search.Domain.LearningProviders;
-using Dfe.Spi.Search.Functions.LearningProviders;
+using Dfe.Spi.Search.Domain.ManagementGroups;
+using Dfe.Spi.Search.Functions.ManagementGroups;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
@@ -17,32 +17,33 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
+namespace Dfe.Spi.Search.Functions.UnitTests.ManagementGroups
 {
-    public class WhenSearchingLearningProviders
+    public class WhenSearchingForManagementGroups
     {
-        private Mock<ILearningProviderSearchManager> _searchManagerMock;
+        
+        private Mock<IManagementGroupSearchManager> _searchManagerMock;
         private Mock<ILoggerWrapper> _loggerMock;
         private Mock<IHttpSpiExecutionContextManager> _spiExecutionManagerMock;
         private DefaultHttpRequest _httpRequest;
         private CancellationToken _cancellationToken;
-        private SearchLearningProviders _function;
+        private SearchManagementGroups _function;
 
         [SetUp]
         public void Arrange()
         {
-            _searchManagerMock = new Mock<ILearningProviderSearchManager>();
+            _searchManagerMock = new Mock<IManagementGroupSearchManager>();
             _searchManagerMock.Setup(m => m.SearchAsync(It.IsAny<SearchRequest>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new SearchResultset<LearningProviderSearchDocument>
+                .ReturnsAsync(new SearchResultset<ManagementGroupSearchDocument>
                 {
-                    Documents = new LearningProviderSearchDocument[0]
+                    Documents = new ManagementGroupSearchDocument[0]
                 });
 
             _loggerMock = new Mock<ILoggerWrapper>();
             
             _spiExecutionManagerMock = new Mock<IHttpSpiExecutionContextManager>();
 
-            _function = new SearchLearningProviders(
+            _function = new SearchManagementGroups(
                 _searchManagerMock.Object, 
                 _loggerMock.Object,
                 _spiExecutionManagerMock.Object);
@@ -74,7 +75,7 @@ namespace Dfe.Spi.Search.Functions.UnitTests.LearningProviders
         }
 
         [Test, AutoData]
-        public async Task ThenItShouldReturnResultsFromSearchManager(SearchResultset<LearningProviderSearchDocument> searchResultset)
+        public async Task ThenItShouldReturnResultsFromSearchManager(SearchResultset<ManagementGroupSearchDocument> searchResultset)
         {
             _searchManagerMock.Setup(m => m.SearchAsync(It.IsAny<SearchRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(searchResultset);

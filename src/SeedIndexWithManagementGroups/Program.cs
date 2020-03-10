@@ -5,60 +5,59 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
 using Dfe.Spi.Models.Entities;
-using Dfe.Spi.Search.Application.LearningProviders;
+using Dfe.Spi.Search.Application.ManagementGroups;
 using Dfe.Spi.Search.Domain.Configuration;
-using Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch;
-using Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders;
+using Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.ManagementGroups;
 using Newtonsoft.Json;
 
-namespace SeedIndexWithLearningProviders
+namespace SeedIndexWithManagementGroups
 {
     class Program
     {
         private static Logger _logger;
-        private static ILearningProviderSearchManager _searchManager;
+        private static IManagementGroupSearchManager _searchManager;
 
         static async Task Run(CommandLineOptions options, CancellationToken cancellationToken = default)
         {
             Init(options);
 
-            var learningProviders = await ReadLearningProviders(options.InputPath, cancellationToken);
-            await SyncLearningProviders(learningProviders, options.Source, cancellationToken);
+            var managementGroups = await ReadManagementGroups(options.InputPath, cancellationToken);
+            await SyncManagementGroups(managementGroups, options.Source, cancellationToken);
         }
 
         static void Init(CommandLineOptions options)
         {
-            var searchIndex = new AcsLearningProviderSearchIndex(
+            var searchIndex = new AcsManagementGroupSearchIndex(
                 new SearchIndexConfiguration
                 {
                     AzureCognitiveSearchServiceName = options.AcsServiceName,
                     AzureCognitiveSearchKey = options.AcsKey,
-                    LearningProviderIndexName = options.IndexName,
+                    ManagementGroupIndexName = options.IndexName,
                 },
                 _logger);
-            _searchManager = new LearningProviderSearchManager(searchIndex, _logger);
+            _searchManager = new ManagementGroupSearchManager(searchIndex, _logger);
         }
 
-        static async Task<LearningProvider[]> ReadLearningProviders(string path, CancellationToken cancellationToken)
+        static async Task<ManagementGroup[]> ReadManagementGroups(string path, CancellationToken cancellationToken)
         {
             using(var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
             using (var reader = new StreamReader(stream))
             {
                 var json = await reader.ReadToEndAsync();
-                return JsonConvert.DeserializeObject<LearningProvider[]>(json);
+                return JsonConvert.DeserializeObject<ManagementGroup[]>(json);
             }
         }
 
-        static async Task SyncLearningProviders(LearningProvider[] learningProviders, string source,
+        static async Task SyncManagementGroups(ManagementGroup[] managementGroups, string source,
             CancellationToken cancellationToken)
         {
             const int batchSize = 100;
             var position = 0;
 
-            while (position < learningProviders.Length)
+            while (position < managementGroups.Length)
             {
-                var batch = learningProviders.Skip(position).Take(batchSize).ToArray();
-                _logger.Info($"Starting batch {position} - {position + batch.Length} of {learningProviders.Length}");
+                var batch = managementGroups.Skip(position).Take(batchSize).ToArray();
+                _logger.Info($"Starting batch {position} - {position + batch.Length} of {managementGroups.Length}");
 
                 await _searchManager.SyncBatchAsync(batch, source, cancellationToken);
 

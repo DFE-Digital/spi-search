@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommandLine;
 using Dfe.Spi.Search.Domain.Configuration;
 using Dfe.Spi.Search.Domain.LearningProviders;
+using Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch;
 using Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.LearningProviders;
 
 namespace GiasDataLoader
@@ -20,7 +21,7 @@ namespace GiasDataLoader
             {
                 AzureCognitiveSearchServiceName = options.SearchServiceName,
                 AzureCognitiveSearchKey = options.SearchServiceKey,
-                IndexName = options.IndexName,
+                LearningProviderIndexName = options.IndexName,
             };
 
             await ProcessEstablishmentsFile(options, searchIndexConfig, cancellationToken);
@@ -47,8 +48,8 @@ namespace GiasDataLoader
 
             var index = new AcsLearningProviderSearchIndex(searchIndexConfig, _logger);
 
-            _logger.Info($"Creating index {options.IndexName}");
-            await index.CreateOrUpdateIndexAsync(cancellationToken);
+            // _logger.Info($"Creating index {options.IndexName}");
+            // await index.CreateOrUpdateIndexAsync(cancellationToken);
             var skip = 0;
             var take = 50;
             while (skip < establishments.Length)
