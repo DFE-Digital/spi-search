@@ -21,6 +21,8 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch.ManagementGroups
                 Type = model.Type,
                 Identifier = model.Identifier,
                 CompaniesHouseNumber = model.CompaniesHouseNumber,
+                SourceSystemName = model.SourceSystemName,
+                SourceSystemId = model.SourceSystemId,
             };
         }
 
