@@ -38,6 +38,11 @@ namespace Dfe.Spi.Search.Application.LearningProviders
         public async Task<SearchResultset<LearningProviderSearchDocument>> SearchAsync(SearchRequest request,
             CancellationToken cancellationToken)
         {
+            if (request.Take == 0)
+            {
+                request.Take = 50;
+            }
+            
             await EnsureSearchRequestIsValid(request, cancellationToken);
 
             return await _searchIndex.SearchAsync(request, cancellationToken);

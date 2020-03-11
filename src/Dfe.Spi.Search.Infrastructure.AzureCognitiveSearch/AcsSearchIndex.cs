@@ -25,7 +25,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch
             _configuration = configuration;
             _indexName = indexName;
             _logger = logger;
-            
+
             var properties = typeof(TSearch).GetProperties();
             var definitions = new List<SearchFieldDefinition>();
 
@@ -62,12 +62,14 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch
             }
         }
 
-        public virtual async Task<SearchResultset<TModel>> SearchAsync(SearchRequest request, CancellationToken cancellationToken)
+        public virtual async Task<SearchResultset<TModel>> SearchAsync(SearchRequest request,
+            CancellationToken cancellationToken)
         {
             using (var client = GetIndexClient())
             {
                 var search = BuildSearch(request);
-                _logger.Info($"Search ACS with query {search.Query} and filter {search.Filter}...");
+                _logger.Info(
+                    $"Search ACS with query {search.Query} and filter {search.Filter} for items {request.Skip} to {request.Skip + request.Take}...");
 
                 var results = await client.Documents.SearchAsync<TSearch>(
                     search.Query,
@@ -75,6 +77,10 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch
                     {
                         QueryType = QueryType.Full,
                         Filter = search.Filter,
+                        Skip = request.Skip,
+                        Top = request.Take,
+                        OrderBy = new[] {"Id"},
+                        IncludeTotalResultCount = true,
                     },
                     cancellationToken: cancellationToken);
 
@@ -83,6 +89,9 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch
                 return new SearchResultset<TModel>
                 {
                     Documents = documents,
+                    Skipped = request.Skip,
+                    Taken = request.Take,
+                    TotalNumberOfDocuments = results.Count ?? 0,
                 };
             }
         }
@@ -96,7 +105,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch
             return new SearchIndexClient(_configuration.AzureCognitiveSearchServiceName, _indexName,
                 new SearchCredentials(_configuration.AzureCognitiveSearchKey));
         }
-        
+
         protected virtual AcsSearch BuildSearch(SearchRequest request)
         {
             var search = new AcsSearch(request.CombinationOperator);
@@ -134,7 +143,7 @@ namespace Dfe.Spi.Search.Infrastructure.AzureCognitiveSearch
         protected virtual string EncodeIdForAcs(string id)
         {
             var encodedId = new StringBuilder();
-            
+
             foreach (var character in id)
             {
                 if (char.IsLetterOrDigit(character) ||
